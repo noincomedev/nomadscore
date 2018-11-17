@@ -53,6 +53,10 @@ const styles = theme => ({
   focusedLabel: {
     color: `${theme.palette.secondary.main} !important`
   },
+  footerContainer: {
+    minHeight: "33vh",
+    background: theme.palette.secondary.light
+  },
   gridList: {
     flexWrap: "nowrap",
     transform: "translateZ(0)",
@@ -509,6 +513,22 @@ class LandingPage extends Component {
               </Grid>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid
+          container
+          classes={{ container: classes.footerContainer }}
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Typography variant="h5" color="primary">
+            I MADE THIS APP ON
+          </Typography>
+          <Typography variant="h3" color="primary">
+            #24HRSTARTUP
+          </Typography>
+          <Typography variant="h6">Powered by Foursquare</Typography>
+          <i className="fab fa-foursquare" />
         </Grid>
       </Fragment>
     );
