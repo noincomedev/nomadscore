@@ -30,3 +30,4 @@ service-configuration
 momentjs:moment
 force-ssl
 random
+http

@@ -16,3 +16,7 @@ body {
 .slider {
   height: 100%;
 }
+
+.mapboxgl-marker:hover {
+  z-index: 1000 !important;
+}

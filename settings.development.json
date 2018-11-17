@@ -1,5 +1,12 @@
 {
   "public": {
-    "appName": "NomadScore"
+    "appName": "NomadScore",
+    "GEOCODING_API_KEY": "AIzaSyDNJXdn0gsxwN4cNF5NaMurO0roYImQ5dU"
+  },
+  "private": {
+    "foursquare": {
+      "CLIENT_ID": "LJTGYWKZCKCS2GWT1IJHAE1BMKDCCE34L5PEG5XN32FEKHBH",
+      "CLIENT_SECRET": "BX5FES4MPVP5BCTCJ0XFK5WSIA0125UX0GSBC0GXDYQAHAG0"
+    }
   }
 }

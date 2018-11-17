@@ -3,6 +3,7 @@ import classNames from "classnames";
 import gql from "graphql-tag";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { withRouter} from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -243,9 +244,9 @@ class LandingPage extends Component {
   };
 
   findVenues = () => {
-    this.props.nearVenues().then(result => {
-      console.log(result);
-    });
+    const { history } = this.props;
+    const { search } = this.state;
+    history.push("/map", {near: search});
   };
 
   render() {
@@ -335,9 +336,7 @@ class LandingPage extends Component {
                   variant="contained"
                   color="secondary"
                   fullWidth
-                  onClick={event => {
-                    this.findVenues;
-                  }}
+                  onClick={this.findVenues}
                 >
                   <i className="fas fa-search" />
                 </Button>
@@ -535,4 +534,4 @@ class LandingPage extends Component {
   }
 }
 
-export default withWidth()(withStyles(styles)(LandingPage));
+export default withWidth()(withStyles(styles)(withRouter(LandingPage)));

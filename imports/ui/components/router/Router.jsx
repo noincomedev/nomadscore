@@ -12,6 +12,7 @@ import Spinner from "../utils/Spinner";
 import PublicRoute from "./PublicRoute";
 
 import LandingPage from "../../pages/LandingPage";
+import MapPage from "../../pages/MapPage";
 import NotFound from "../../pages/NotFound";
 
 const Router = ({ loading, user }) => {
@@ -28,6 +29,14 @@ const Router = ({ loading, user }) => {
               name="landing-page"
               content="index"
               title="Home"
+            />
+            <PublicRoute
+              exact
+              path="/map"
+              content="map-venues"
+              name="Map"
+              title="Map"
+              component={MapPage}
             />
             <PublicRoute
               component={NotFound}

@@ -9,6 +9,24 @@ type Profile {
   imgurl: String
 }
 
+type Category {
+  _id: ID
+  name: String
+}
+
+type Venue {
+  _id: ID
+  name: String
+  location: Location
+  category: Category
+}
+
+type Location {
+  lat: Float
+  lng: Float
+}
+
 type Query {
   user: User
+  nearVenues(near: String): [Venue]
 }
