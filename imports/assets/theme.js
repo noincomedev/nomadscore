@@ -1,6 +1,9 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
 export default createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: {
       main: "#333333"
@@ -16,6 +19,12 @@ export default createMuiTheme({
     MuiButton: {
       contained: {
         borderRadius: 50
+      }
+    },
+    MuiOutlinedInput: {
+      input: {
+        color: "#FFFF",
+        background: "#333333"
       }
     }
   }

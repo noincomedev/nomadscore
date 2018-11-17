@@ -10,3 +10,9 @@ body {
   flex-direction: column;
   flex: 1;
 }
+
+.carousel,
+.slider-wrapper,
+.slider {
+  height: 100%;
+}
