@@ -27,11 +27,12 @@ class NavigationLayout extends Component {
   };
 
   toggleDrawer = () => {
-    this.setState(prevState => {
-      const { open } = prevState;
-      this.props.handleToggleDrawer(!open);
-      return { open: !open };
-    });
+    // this.setState(prevState => {
+    //   const { open } = prevState;
+    //   this.props.handleToggleDrawer(!open);
+    //   return { open: !open };
+    // });
+    console.log("toggleDrawer");
   };
 
   render() {

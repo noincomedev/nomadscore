@@ -10,6 +10,7 @@ import ScrollTop from "../utils/ScrollTop";
 import Spinner from "../utils/Spinner";
 
 import PublicRoute from "./PublicRoute";
+import MultiRoute from "./MultiRoute";
 
 import LandingPage from "../../pages/LandingPage";
 import MapPage from "../../pages/MapPage";
@@ -22,7 +23,7 @@ const Router = ({ loading, user }) => {
       <MuiThemeProvider theme={theme}>
         <ScrollTop>
           <Switch>
-            <PublicRoute
+            <MultiRoute
               exact
               path="/"
               component={LandingPage}
@@ -30,7 +31,7 @@ const Router = ({ loading, user }) => {
               content="index"
               title="Home"
             />
-            <PublicRoute
+            <MultiRoute
               exact
               path="/map"
               content="map-venues"

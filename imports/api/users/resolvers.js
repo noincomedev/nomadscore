@@ -53,6 +53,20 @@ export default {
       });
     }
   },
+  Mutation: {
+    submitHostelVote(obj, { vote }, { user }) {
+      console.log(vote);
+      return { _id: Random.id(5) };
+    },
+    submitCafeVote(obj, { vote }, { user }) {
+      console.log(vote);
+      return { _id: Random.id(5) };
+    },
+    submitCoworkVote(obj, { vote }, { user }) {
+      console.log(vote);
+      return { _id: Random.id(5) };
+    }
+  },
   User: {
     admin: user => (user.profile ? user.profile.admin : false),
     profile: user => {

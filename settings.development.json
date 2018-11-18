@@ -7,6 +7,14 @@
     "foursquare": {
       "CLIENT_ID": "LJTGYWKZCKCS2GWT1IJHAE1BMKDCCE34L5PEG5XN32FEKHBH",
       "CLIENT_SECRET": "BX5FES4MPVP5BCTCJ0XFK5WSIA0125UX0GSBC0GXDYQAHAG0"
+    },
+    "facebook": {
+      "APP_ID": "853588041657171",
+      "APP_SECRET": "994018aa325de5f55f80a49c3822d512"
+    },
+    "google": {
+      "CLIENT_ID": "",
+      "APP_SECRET": ""
     }
   }
 }

@@ -30,3 +30,26 @@ type Query {
   user: User
   nearVenues(near: String): [Venue]
 }
+
+input HostelVoteInput {
+  venueid: ID
+  bed: Int
+  wifi: Int
+}
+input CafeVoteInput {
+  venueid: ID
+  taste: Int
+  wifi: Int
+}
+
+input CoworkVoteInput {
+  venueid: ID
+  seat: Int
+  wifi: Int
+}
+
+type Mutation {
+  submitHostelVote(vote: HostelVoteInput!): Venue
+  submitCafeVote(vote: CafeVoteInput!): Venue
+  submitCoworkVote(vote: CoworkVoteInput!): Venue
+}

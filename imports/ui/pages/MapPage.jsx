@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import classNames from "classnames";
 import Geocode from "react-geocode";
 import gql from "graphql-tag";
@@ -6,14 +6,19 @@ import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import { Query } from "react-apollo";
 import { withRouter } from "react-router-dom";
 
+import AppBar from "@material-ui/core/AppBar";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 
+import SearchForm from "../components/forms/SearchVenuesForm";
 import Spinner from "../components/utils/Spinner";
 
-import SearchForm from "../components/forms/SearchVenuesForm";
+import List from "../layouts/components/lists/ListLayout";
+import Item from "../layouts/components/lists/ListItemLayout";
 
 Geocode.setApiKey(Meteor.settings.public.GEOCODING_API_KEY);
 
@@ -62,8 +67,14 @@ const styles = theme => ({
     padding: theme.spacing.unit
   },
   sidebarContainer: {
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit
+    display: "flex",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    flex: 1,
+    backgroundColor: theme.palette.background.default
+  },
+  sidebarContentContainer: {
+    flex: 1
   }
 });
 
@@ -95,7 +106,8 @@ class MapPage extends Component {
     lat: "",
     lng: "",
     near: "",
-    mounted: false
+    mounted: false,
+    tab: 0
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -126,15 +138,42 @@ class MapPage extends Component {
     );
   };
 
+  handleTabChange = (event, value) => {
+    this.setState({ tab: value });
+  };
+
   render() {
     const { classes, width } = this.props;
-    const { lat, lng, near } = this.state;
+    const { lat, lng, near, tab } = this.state;
+
+    const coworkcategoryid = "4bf58dd8d48988d174941735";
+    const coffecategoryid = "4bf58dd8d48988d1f0941735";
+    const hostelcategoryid = "4bf58dd8d48988d1ee931735";
+
     if (near && lat && lng) {
       return (
         <Query query={GET_NEAR_VENUES} variables={{ near: near }}>
-          {({ loading, error, data, refetch }) => {
+          {({ loading, error, data }) => {
             if (loading) return <Spinner />;
             const { nearVenues } = data;
+            const hostels = [],
+              cafes = [],
+              coworks = [];
+
+            nearVenues.filter(venue => {
+              switch (venue.category._id) {
+                case coworkcategoryid:
+                  coworks.push(venue);
+                  break;
+                case hostelcategoryid:
+                  hostels.push(venue);
+                  break;
+                case coffecategoryid:
+                  cafes.push(venue);
+                  break;
+              }
+            });
+
             const renderMarkerIcon = _id => {
               switch (_id) {
                 case "4bf58dd8d48988d174941735":
@@ -169,46 +208,122 @@ class MapPage extends Component {
                   );
               }
             };
+            const renderTab = tab => {
+              switch (tab) {
+                case 0:
+                  return (
+                    <List title="Hostels">
+                      {hostels.map(hostel => (
+                        <Grid key={hostel._id} item xs={12}>
+                          <Item item={hostel} />
+                        </Grid>
+                      ))}
+                    </List>
+                  );
+                case 1:
+                  return (
+                    <List title="Internet Cafes">
+                      {cafes.map(cafe => (
+                        <Grid key={cafe._id} item xs={12}>
+                          <Item item={cafe} />
+                        </Grid>
+                      ))}
+                    </List>
+                  );
+                case 2:
+                  return (
+                    <List title="Coworks">
+                      {coworks.map(cowork => (
+                        <Grid key={cowork._id} item xs={12}>
+                          <Item item={cowork} />
+                        </Grid>
+                      ))}
+                    </List>
+                  );
+              }
+            };
             return (
-              <Grid container classes={{ container: classes.mapContainer }}>
-                <Grid item xs={12} md={8} style={{ height: "100%" }}>
-                  <Map
-                    style="mapbox://styles/mapbox/streets-v9"
-                    containerStyle={{
-                      height: "100%",
-                      width: "100%"
-                    }}
-                    center={[lng, lat]}
-                    zoom={[isWidthDown("sm", width) ? 10 : 13]}
-                  >
-                    {nearVenues.map(venue => (
-                      <Marker
-                        key={venue._id}
-                        coordinates={[venue.location.lng, venue.location.lat]}
-                        anchor="bottom"
-                        className={classes.icon}
-                      >
-                        {renderMarkerIcon(venue.category._id)}
-                      </Marker>
-                    ))}
-                  </Map>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={4}
-                  classes={{ item: classes.sidebarContainer }}
-                >
-                  <Grid
-                    container
-                    component={Paper}
-                    elevation={5}
-                    classes={{ container: classes.searchContainer }}
-                  >
-                    <SearchForm near={near} onSubmit={this.updateNear} />
+              <Fragment>
+                <Grid container classes={{ container: classes.mapContainer }}>
+                  <Grid item xs={12} md={8} style={{ height: "100%" }}>
+                    <Map
+                      style="mapbox://styles/mapbox/streets-v9"
+                      containerStyle={{
+                        height: "100%",
+                        width: "100%"
+                      }}
+                      center={[lng, lat]}
+                      zoom={[isWidthDown("sm", width) ? 10 : 13]}
+                    >
+                      {nearVenues.map(venue => (
+                        <Marker
+                          key={venue._id}
+                          coordinates={[venue.location.lng, venue.location.lat]}
+                          anchor="bottom"
+                          className={classes.icon}
+                        >
+                          {renderMarkerIcon(venue.category._id)}
+                        </Marker>
+                      ))}
+                    </Map>
                   </Grid>
                 </Grid>
-              </Grid>
+                <Grid
+                  container
+                  classes={{ container: classes.sidebarContainer }}
+                >
+                  <Grid item xs={12} style={{ padding: 8 }}>
+                    <Grid
+                      container
+                      component={Paper}
+                      elevation={5}
+                      classes={{ container: classes.searchContainer }}
+                    >
+                      <SearchForm near={near} onSubmit={this.updateNear} />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      display: "flex",
+                      flex: "1",
+                      flexDirection: "column"
+                    }}
+                  >
+                    <Grid
+                      container
+                      justify="flex-start"
+                      alignContent="space-between"
+                      classes={{ container: classes.sidebarContentContainer }}
+                    >
+                      {renderTab(tab)}
+                      <AppBar position="static">
+                        <Tabs
+                          value={tab}
+                          onChange={this.handleTabChange}
+                          fullWidth
+                          centered
+                        >
+                          <Tab
+                            label={<i className={classNames("fas fa-bed")} />}
+                          />
+                          <Tab
+                            label={
+                              <i className={classNames("fas fa-coffee")} />
+                            }
+                          />
+                          <Tab
+                            label={
+                              <i className={classNames("fas fa-laptop")} />
+                            }
+                          />
+                        </Tabs>
+                      </AppBar>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Fragment>
             );
           }}
         </Query>

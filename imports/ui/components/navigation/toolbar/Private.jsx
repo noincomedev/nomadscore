@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
+import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
@@ -20,14 +21,15 @@ const styles = theme => ({
     display: "none"
   },
   logo: {
+    marginLeft: theme.spacing.unit,
     textDecoration: "none",
     color: theme.palette.common.white,
-    [theme.breakpoints.up("md")]: {
-      marginLeft: theme.spacing.unit * 3
-    }
+    fontFamily: "pacifico",
+    fontSize: "2rem",
+    textShadow: "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
   },
   menuIcon: {
-    color: theme.palette.secondary.main
+    color: theme.palette.common.white
   },
   toolbarButtonsContainer: {
     display: "flex",
@@ -39,26 +41,27 @@ const styles = theme => ({
 const Private = ({ classes, open, onToggleDrawer }) => {
   return (
     <Toolbar disableGutters className={classNames(open && classes.drawerOpen)}>
-      <Hidden lgUp>
-        <IconButton
-          style={{ marginLeft: 8 }}
-          color="inherit"
-          aria-label="open drawer"
-          onClick={onToggleDrawer}
-          className={classNames(open && classes.hide)}
+      <Grid container justify="space-between">
+        <Typography
+          className={classes.logo}
+          component={Link}
+          to="/"
+          variant="h6"
         >
-          <Menu classes={{ root: classes.menuIcon }} />
-        </IconButton>
-      </Hidden>
-      <Typography
-        classes={{ colorSecondary: classes.logo }}
-        component={Link}
-        color="secondary"
-        to="/"
-        variant="title"
-      >
-        {Meteor.settings.public.appName}
-      </Typography>
+          {Meteor.settings.public.appName}
+        </Typography>
+        <Hidden lgUp>
+          <IconButton
+            style={{ marginLeft: 8 }}
+            color="inherit"
+            aria-label="open drawer"
+            onClick={onToggleDrawer}
+            className={classNames(open && classes.hide)}
+          >
+            <Menu classes={{ root: classes.menuIcon }} />
+          </IconButton>
+        </Hidden>
+      </Grid>
     </Toolbar>
   );
 };
