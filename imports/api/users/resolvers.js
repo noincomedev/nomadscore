@@ -17,7 +17,7 @@ export default {
             v: "20180323",
             limit: 25,
             intent: "browse",
-            radius: 3000
+            radius: 5000
           }
         }
       );

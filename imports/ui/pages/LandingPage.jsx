@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from "react";
 import classNames from "classnames";
+import Geocode from "react-geocode";
 import gql from "graphql-tag";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -16,6 +17,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import withWidth, { isWidthDown, isWidthUp } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
+
+import Spinner from "../components/utils/Spinner";
 
 const backgroundImgUrl =
   "https://images.unsplash.com/photo-1513258496099-48168024aec0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=73c00aaa6d23115d7fbe494c0cc1e5e3&auto=format&fit=crop&w=2100&q=80";
@@ -230,7 +233,8 @@ class LandingPage extends Component {
   state = {
     reveal: false,
     index: 0,
-    search: ""
+    search: "",
+    loading: false
   };
 
   handleCarouselChange = index => {
@@ -243,15 +247,25 @@ class LandingPage extends Component {
     this.setState({ [name]: value });
   };
 
+  toggleLoading = () => this.setState({ loading: !this.state.loading });
+
   findVenues = () => {
     const { history } = this.props;
     const { search } = this.state;
-    history.push("/map", {near: search});
+    Geocode.fromAddress(search).then(
+      response => {
+        const { lat, lng } = response.results[0].geometry.location;
+        history.push("/map", { near: search, lat, lng });
+      },
+      error => {
+        console.error(error);
+      }
+    );
   };
 
   render() {
     const { classes, width } = this.props;
-    const { index, search } = this.state;
+    const { index, search, loading } = this.state;
     return (
       <Fragment>
         <Grid
@@ -305,43 +319,47 @@ class LandingPage extends Component {
                 WITH FAST INTERNET
               </Typography>
             </Grid>
-            <Grid container justify="center" spacing={8}>
-              <Grid item xs={8} md={6}>
-                <TextField
-                  variant="outlined"
-                  id="search"
-                  value={search}
-                  label="Where are you going?"
-                  onChange={this.handleChange}
-                  placeholder="Chiang Mai, Thailand"
-                  fullWidth
-                  InputProps={{
-                    classes: { notchedOutline: classes.notchedOutline }
-                  }}
-                  InputLabelProps={{
-                    classes: {
-                      root: classes.inputLabel,
-                      focused: classes.focusedLabel
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={3}
-                md={1}
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  fullWidth
-                  onClick={this.findVenues}
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Grid container justify="center" spacing={8}>
+                <Grid item xs={8} md={6}>
+                  <TextField
+                    variant="outlined"
+                    id="search"
+                    value={search}
+                    label="Where are you going?"
+                    onChange={this.handleChange}
+                    placeholder="Chiang Mai, Thailand"
+                    fullWidth
+                    InputProps={{
+                      classes: { notchedOutline: classes.notchedOutline }
+                    }}
+                    InputLabelProps={{
+                      classes: {
+                        root: classes.inputLabel,
+                        focused: classes.focusedLabel
+                      }
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={3}
+                  md={1}
+                  style={{ display: "flex", alignItems: "center" }}
                 >
-                  <i className="fas fa-search" />
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    fullWidth
+                    onClick={this.findVenues}
+                  >
+                    <i className="fas fa-search" />
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
         </Grid>
         <Grid

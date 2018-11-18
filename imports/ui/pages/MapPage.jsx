@@ -7,9 +7,13 @@ import { Query } from "react-apollo";
 import { withRouter } from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import withWidth, { isWidthDown } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 
 import Spinner from "../components/utils/Spinner";
+
+import SearchForm from "../components/forms/SearchVenuesForm";
 
 Geocode.setApiKey(Meteor.settings.public.GEOCODING_API_KEY);
 
@@ -46,9 +50,20 @@ const styles = theme => ({
   marker: {
     color: theme.palette.secondary.main
   },
-  rootContainer: {
+  mapContainer: {
+    position: "relative",
     width: "100%",
-    height: "50vh"
+    height: "95vh",
+    [theme.breakpoints.down("sm")]: {
+      height: "33vh"
+    }
+  },
+  searchContainer: {
+    padding: theme.spacing.unit
+  },
+  sidebarContainer: {
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit
   }
 });
 
@@ -78,33 +93,46 @@ const GET_NEAR_VENUES = gql`
 class MapPage extends Component {
   state = {
     lat: "",
-    lng: ""
+    lng: "",
+    near: "",
+    mounted: false
   };
 
-  componentDidMount() {
-    const { location } = this.props;
-    const { near } = location.state;
-    if (near) {
-      Geocode.fromAddress(near).then(
-        response => {
-          const { lat, lng } = response.results[0].geometry.location;
-          this.setState({ lat, lng });
-        },
-        error => {
-          console.error(error);
-        }
-      );
-    }
+  static getDerivedStateFromProps(props, state) {
+    const { near, lat, lng } = props.location.state;
+    const { mounted } = state;
+    if (near && !mounted) {
+      return {
+        near,
+        lat,
+        lng,
+        mounted: true
+      };
+    } else
+      return {
+        ...state
+      };
   }
 
+  updateNear = ({ near }) => {
+    Geocode.fromAddress(near).then(
+      response => {
+        const { lat, lng } = response.results[0].geometry.location;
+        this.setState({ near, lat, lng });
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  };
+
   render() {
-    const { classes, location } = this.props;
-    const { near } = location.state;
-    const { lat, lng } = this.state;
+    const { classes, width } = this.props;
+    const { lat, lng, near } = this.state;
     if (near && lat && lng) {
       return (
-        <Query query={GET_NEAR_VENUES} variables={{ near }}>
-          {({ loading, error, data }) => {
+        <Query query={GET_NEAR_VENUES} variables={{ near: near }}>
+          {({ loading, error, data, refetch }) => {
             if (loading) return <Spinner />;
             const { nearVenues } = data;
             const renderMarkerIcon = _id => {
@@ -142,27 +170,44 @@ class MapPage extends Component {
               }
             };
             return (
-              <Grid container classes={{ container: classes.rootContainer }}>
-                <Map
-                  style="mapbox://styles/mapbox/streets-v9"
-                  containerStyle={{
-                    height: "100%",
-                    width: "100%"
-                  }}
-                  center={[lng, lat]}
-                  zoom={[12]}
+              <Grid container classes={{ container: classes.mapContainer }}>
+                <Grid item xs={12} md={8} style={{ height: "100%" }}>
+                  <Map
+                    style="mapbox://styles/mapbox/streets-v9"
+                    containerStyle={{
+                      height: "100%",
+                      width: "100%"
+                    }}
+                    center={[lng, lat]}
+                    zoom={[isWidthDown("sm", width) ? 10 : 13]}
+                  >
+                    {nearVenues.map(venue => (
+                      <Marker
+                        key={venue._id}
+                        coordinates={[venue.location.lng, venue.location.lat]}
+                        anchor="bottom"
+                        className={classes.icon}
+                      >
+                        {renderMarkerIcon(venue.category._id)}
+                      </Marker>
+                    ))}
+                  </Map>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  classes={{ item: classes.sidebarContainer }}
                 >
-                  {nearVenues.map(venue => (
-                    <Marker
-                      key={venue._id}
-                      coordinates={[venue.location.lng, venue.location.lat]}
-                      anchor="bottom"
-                      className={classes.icon}
-                    >
-                      {renderMarkerIcon(venue.category._id)}
-                    </Marker>
-                  ))}
-                </Map>
+                  <Grid
+                    container
+                    component={Paper}
+                    elevation={5}
+                    classes={{ container: classes.searchContainer }}
+                  >
+                    <SearchForm near={near} onSubmit={this.updateNear} />
+                  </Grid>
+                </Grid>
               </Grid>
             );
           }}
@@ -172,4 +217,4 @@ class MapPage extends Component {
     return <Spinner />;
   }
 }
-export default withStyles(styles)(withRouter(MapPage));
+export default withWidth()(withStyles(styles)(withRouter(MapPage)));

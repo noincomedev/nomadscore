@@ -17,6 +17,8 @@
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^4.0.3",
+    "jquery": "^3.3.1",
+    "jquery-validation": "^1.18.0",
     "mapbox-gl": "^0.51.0",
     "meteor-node-stubs": "^0.4.1",
     "prop-types": "^15.6.2",
