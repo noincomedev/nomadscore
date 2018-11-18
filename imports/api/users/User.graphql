@@ -9,47 +9,17 @@ type Profile {
   imgurl: String
 }
 
-type Category {
-  _id: ID
-  name: String
-}
-
-type Venue {
-  _id: ID
-  name: String
-  location: Location
-  category: Category
-}
-
-type Location {
-  lat: Float
-  lng: Float
-}
-
 type Query {
   user: User
   nearVenues(near: String): [Venue]
 }
 
-input HostelVoteInput {
+input VoteInput {
   venueid: ID
-  bed: Int
-  wifi: Int
-}
-input CafeVoteInput {
-  venueid: ID
-  taste: Int
-  wifi: Int
-}
-
-input CoworkVoteInput {
-  venueid: ID
-  seat: Int
-  wifi: Int
+  a: Int
+  b: Int
 }
 
 type Mutation {
-  submitHostelVote(vote: HostelVoteInput!): Venue
-  submitCafeVote(vote: CafeVoteInput!): Venue
-  submitCoworkVote(vote: CoworkVoteInput!): Venue
+  submitVote(vote: VoteInput!): Venue
 }

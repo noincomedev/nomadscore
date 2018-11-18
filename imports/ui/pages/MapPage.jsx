@@ -89,6 +89,11 @@ const GET_NEAR_VENUES = gql`
     nearVenues(near: $near) {
       _id
       name
+      votes {
+        owner
+        a
+        b
+      }
       category {
         _id
         name
@@ -159,7 +164,6 @@ class MapPage extends Component {
             const hostels = [],
               cafes = [],
               coworks = [];
-
             nearVenues.filter(venue => {
               switch (venue.category._id) {
                 case coworkcategoryid:

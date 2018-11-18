@@ -1,0 +1,22 @@
+type Venue {
+  _id: ID
+  name: String
+  location: Location
+  category: Category
+  voteids: [ID]
+  votes: [Vote]
+}
+
+type Category {
+  _id: ID
+  name: String
+}
+
+type Location {
+  lat: Float
+  lng: Float
+}
+
+extend type Query {
+  venue(_id: ID!): Venue
+}

@@ -6,8 +6,14 @@ import merge from "lodash/merge";
 import UserSchema from "../../../api/users/User.graphql";
 import UserResolvers from "../../../api/users/resolvers";
 
-const typeDefs = [UserSchema];
-const resolvers = merge(UserResolvers);
+import VenueSchema from "../../../api/venues/Venue.graphql";
+import VenueResolvers from "../../../api/venues/resolvers";
+
+import VoteSchema from "../../../api/votes/Vote.graphql";
+import VoteResolvers from "../../../api/votes/resolvers";
+
+const typeDefs = [UserSchema, VenueSchema, VoteSchema];
+const resolvers = merge(UserResolvers, VenueResolvers, VoteResolvers);
 
 const server = new ApolloServer({
   typeDefs,

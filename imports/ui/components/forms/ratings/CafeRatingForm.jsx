@@ -47,20 +47,16 @@ class CafeRatingForm extends Component {
     const { venueid, width, onResult } = this.props;
     const { taste, wifi } = this.state;
     this.props
-      .submitCafeVote({ variables: { vote: { venueid, taste, wifi } } })
+      .submitVote({ variables: { vote: { venueid, a: taste, b: wifi } } })
       .then(({ data }) => {
-        const { submitCafeVote } = data;
-        const { _id } = submitCafeVote;
-        if (_id) {
-          Bert.alert({
-            title: "Success",
-            message: "Your vote has been saved.",
-            type: "success",
-            style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
-            icon: "fa-check"
-          });
-          onResult();
-        }
+        Bert.alert({
+          title: "Success",
+          message: "Your vote has been saved.",
+          type: "success",
+          style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
+          icon: "fa-check"
+        });
+        onResult();
       })
       .catch(error =>
         Bert.alert({
@@ -253,13 +249,13 @@ class CafeRatingForm extends Component {
 }
 
 const SUBMIT_VOTE = gql`
-  mutation submitCafeVote($vote: CafeVoteInput!) {
-    submitCafeVote(vote: $vote) {
+  mutation submitVote($vote: VoteInput!) {
+    submitVote(vote: $vote) {
       _id
     }
   }
 `;
 
-export default graphql(SUBMIT_VOTE, { name: "submitCafeVote" })(
+export default graphql(SUBMIT_VOTE, { name: "submitVote" })(
   withWidth()(withStyles(styles)(CafeRatingForm))
 );

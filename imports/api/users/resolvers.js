@@ -1,3 +1,5 @@
+import Votes from "../votes/Votes";
+
 export default {
   Query: {
     user(obj, args, { user }) {
@@ -54,17 +56,13 @@ export default {
     }
   },
   Mutation: {
-    submitHostelVote(obj, { vote }, { user }) {
-      console.log(vote);
-      return { _id: Random.id(5) };
-    },
-    submitCafeVote(obj, { vote }, { user }) {
-      console.log(vote);
-      return { _id: Random.id(5) };
-    },
-    submitCoworkVote(obj, { vote }, { user }) {
-      console.log(vote);
-      return { _id: Random.id(5) };
+    submitVote(obj, { vote }, { user }) {
+      if (user) {
+        const { venueid, a, b } = vote;
+        const voteid = Votes.insert({ owner: user._id, venueid, a, b });
+        return { _id: voteid };
+      }
+      throw new Error("unauthorized");
     }
   },
   User: {

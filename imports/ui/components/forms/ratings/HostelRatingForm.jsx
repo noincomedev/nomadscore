@@ -48,20 +48,16 @@ class HostelRatingForm extends Component {
     const { venueid, width, onResult } = this.props;
     const { bed, wifi } = this.state;
     this.props
-      .submitHostelVote({ variables: { vote: { venueid, bed, wifi } } })
+      .submitVote({ variables: { vote: { venueid, a: bed, b: wifi } } })
       .then(({ data }) => {
-        const { submitHostelVote } = data;
-        const { _id } = submitHostelVote;
-        if (_id) {
-          Bert.alert({
-            title: "Success",
-            message: "Your vote has been saved.",
-            type: "success",
-            style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
-            icon: "fa-check"
-          });
-          onResult();
-        }
+        Bert.alert({
+          title: "Success",
+          message: "Your vote has been saved.",
+          type: "success",
+          style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
+          icon: "fa-check"
+        });
+        onResult();
       })
       .catch(error =>
         Bert.alert({
@@ -254,13 +250,13 @@ class HostelRatingForm extends Component {
 }
 
 const SUBMIT_VOTE = gql`
-  mutation submitHostelVote($vote: HostelVoteInput!) {
-    submitHostelVote(vote: $vote) {
+  mutation submitVote($vote: VoteInput!) {
+    submitVote(vote: $vote) {
       _id
     }
   }
 `;
 
-export default graphql(SUBMIT_VOTE, { name: "submitHostelVote" })(
+export default graphql(SUBMIT_VOTE, { name: "submitVote" })(
   withWidth()(withStyles(styles)(HostelRatingForm))
 );

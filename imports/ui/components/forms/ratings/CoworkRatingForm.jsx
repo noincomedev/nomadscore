@@ -46,20 +46,16 @@ class CoworkRatingForm extends Component {
     const { venueid, width, onResult } = this.props;
     const { seat, wifi } = this.state;
     this.props
-      .submitCoworkVote({ variables: { vote: { venueid, seat, wifi } } })
+      .submitVote({ variables: { vote: { venueid, a: seat, b: wifi } } })
       .then(({ data }) => {
-        const { submitCoworkVote } = data;
-        const { _id } = submitCoworkVote;
-        if (_id) {
-          Bert.alert({
-            title: "Success",
-            message: "Your vote has been saved.",
-            type: "success",
-            style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
-            icon: "fa-check"
-          });
-          onResult();
-        }
+        Bert.alert({
+          title: "Success",
+          message: "Your vote has been saved.",
+          type: "success",
+          style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
+          icon: "fa-check"
+        });
+        onResult();
       })
       .catch(error =>
         Bert.alert({
@@ -251,13 +247,13 @@ class CoworkRatingForm extends Component {
 }
 
 const SUBMIT_VOTE = gql`
-  mutation submitCoworkVote($vote: CoworkVoteInput!) {
-    submitCoworkVote(vote: $vote) {
+  mutation submitVote($vote: VoteInput!) {
+    submitVote(vote: $vote) {
       _id
     }
   }
 `;
 
-export default graphql(SUBMIT_VOTE, { name: "submitCoworkVote" })(
+export default graphql(SUBMIT_VOTE, { name: "submitVote" })(
   withWidth()(withStyles(styles)(CoworkRatingForm))
 );

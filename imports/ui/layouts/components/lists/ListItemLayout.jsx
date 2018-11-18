@@ -68,6 +68,9 @@ class ListItemLayout extends Component {
   render() {
     const { classes, item } = this.props;
     const { showDialog, showButtons } = this.state;
+    const { votes } = item;
+    const voters = votes.map(vote => vote.owner);
+    const voted = voters.includes(Meteor.userId());
     return (
       <Fragment>
         <Grid item xs={12} style={{ padding: 8 }}>
@@ -86,17 +89,22 @@ class ListItemLayout extends Component {
               >
                 <Typography variant="h6" classes={{ root: classes.name }}>
                   {item.name.length > 15
-                    ? `${item.name.substring(0, 15)}...`
+                    ? `${item.name.substring(0, 8)}...`
                     : item.name}
                 </Typography>
-                <Button
-                  variant="text"
-                  size="small"
-                  color="secondary"
-                  onClick={this.toggleDialog}
-                >
-                  RATE
-                </Button>
+                <Typography variant="subtitle2" color="primary">
+                  {`Votes: ${votes.length}`}
+                </Typography>
+                {!voted && (
+                  <Button
+                    variant="text"
+                    size="small"
+                    color="secondary"
+                    onClick={this.toggleDialog}
+                  >
+                    RATE
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Grid>
