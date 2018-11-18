@@ -71,10 +71,23 @@ const styles = theme => ({
     justifyContent: "flex-start",
     flexDirection: "column",
     flex: 1,
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
+    [theme.breakpoints.up("md")]: {
+      position: "absolute",
+      maxWidth: "33%",
+      right: 0
+    }
   },
   sidebarContentContainer: {
     flex: 1
+  },
+  sidebarItemContainer: {
+    display: "flex",
+    flex: "1",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      height: "87vh"
+    }
   }
 });
 
@@ -289,11 +302,7 @@ class MapPage extends Component {
                   <Grid
                     item
                     xs={12}
-                    style={{
-                      display: "flex",
-                      flex: "1",
-                      flexDirection: "column"
-                    }}
+                    classes={{ item: classes.sidebarItemContainer }}
                   >
                     <Grid
                       container

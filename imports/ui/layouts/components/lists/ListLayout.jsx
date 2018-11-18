@@ -18,9 +18,14 @@ const styles = theme => ({
   },
   tabContentContainer: {
     width: "100%",
-    minHeight: "37vh",
-    maxHeight: "34vh",
-    overflow: "scroll"
+    overflow: "scroll",
+    [theme.breakpoints.up("md")]: {
+      height: "83vh"
+    },
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "37vh",
+      maxHeight: "34vh"
+    }
   }
 });
 

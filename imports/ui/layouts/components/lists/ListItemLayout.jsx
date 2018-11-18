@@ -17,6 +17,12 @@ import RateCowork from "../../../components/forms/ratings/CoworkRatingForm";
 import RateCafe from "../../../components/forms/ratings/CafeRatingForm";
 
 const styles = theme => ({
+  avatarContainer: {
+    [theme.breakpoints.up("md")]: {
+      height: "100%",
+      justifyContent: "center"
+    }
+  },
   dialogContainer: {
     background: theme.palette.grey[300]
   },
@@ -76,7 +82,11 @@ class ListItemLayout extends Component {
         <Grid item xs={12} style={{ padding: 8 }}>
           <Grid container classes={{ container: classes.rootContainer }}>
             <Grid item xs={2} style={{ flex: 1, height: "100%" }}>
-              <Grid container alignItems="center">
+              <Grid
+                container
+                alignItems="center"
+                classes={{ container: classes.avatarContainer }}
+              >
                 <Avatar src="https://via.placeholder.com/150" />
               </Grid>
             </Grid>

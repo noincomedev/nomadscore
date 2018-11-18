@@ -8,9 +8,9 @@ ServiceConfiguration.configurations.upsert(
   },
   {
     $set: {
-      appId: Meteor.settings.private.facebook.APP_ID,
+      appId: Meteor.settings.public.facebook.APP_ID,
       loginStyle: "popup",
-      secret: Meteor.settings.private.facebook.APP_SECRET
+      secret: Meteor.settings.public.facebook.APP_SECRET
     }
   }
 );
@@ -21,8 +21,8 @@ ServiceConfiguration.configurations.upsert(
   },
   {
     $set: {
-      clientId: Meteor.settings.private.google.CLIENT_ID,
-      secret: Meteor.settings.private.google.APP_SECRET
+      clientId: Meteor.settings.public.google.CLIENT_ID,
+      secret: Meteor.settings.public.google.APP_SECRET
     }
   }
 );
