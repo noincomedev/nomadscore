@@ -12,6 +12,7 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -39,7 +40,7 @@ const styles = theme => ({
     fontSize: "1rem"
   },
   communityContainer: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.light,
     minHeight: "33vh",
     [theme.breakpoints.down("sm")]: {
       paddingTop: theme.spacing.unit * 3,
@@ -58,8 +59,11 @@ const styles = theme => ({
     color: `${theme.palette.secondary.main} !important`
   },
   footerContainer: {
-    minHeight: "33vh",
-    background: theme.palette.secondary.light
+    background: theme.palette.primary.dark
+  },
+  footerHeadingContainer: {
+    padding: theme.spacing.unit * 3,
+    background: theme.palette.primary.light
   },
   gridList: {
     flexWrap: "nowrap",
@@ -114,6 +118,11 @@ const styles = theme => ({
   imgWrapper: {
     background: "red"
   },
+  instagramButton: {
+    height: 50,
+    width: 50,
+    color: theme.palette.common.white
+  },
   inputLabel: {
     color: theme.palette.secondary.main
   },
@@ -130,11 +139,18 @@ const styles = theme => ({
       minHeight: "100%"
     }
   },
+  link: {
+    color: theme.palette.primary.dark
+  },
   logo: {
     textDecoration: "none",
     color: theme.palette.common.white,
     fontFamily: "pacifico",
     textShadow: "-3px 0 black, 0 3px black, 3px 0 black, 0 -3px black"
+  },
+  mediaContainer: {
+    height: "100%",
+    background: theme.palette.secondary.main
   },
   notchedOutline: {
     borderColor: `${theme.palette.grey[600]} !important`,
@@ -184,6 +200,9 @@ const styles = theme => ({
     transform: "skew(-20deg)",
     margin: theme.spacing.unit,
     background: theme.palette.secondary.light
+  },
+  whitelink: {
+    color: theme.palette.common.white
   }
 });
 
@@ -293,7 +312,7 @@ class LandingPage extends Component {
               container
               justify="center"
               alignItems="center"
-              direction={isWidthUp("md", width) ? "row" : "column"}
+              direction="column"
             >
               <Typography
                 variant="h5"
@@ -470,7 +489,7 @@ class LandingPage extends Component {
               justify="center"
             >
               <Grid item xs={10} md={6}>
-                <Typography variant="h2" align="center" color="secondary">
+                <Typography variant="h2" align="center" color="primary">
                   HELP
                 </Typography>
                 <Typography
@@ -480,7 +499,7 @@ class LandingPage extends Component {
                 >
                   +1500
                 </Typography>
-                <Typography variant="h2" align="center" color="secondary">
+                <Typography variant="h2" align="center" color="primary">
                   OTHER NOMADS
                 </Typography>
                 <Typography
@@ -531,21 +550,108 @@ class LandingPage extends Component {
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          container
-          classes={{ container: classes.footerContainer }}
-          direction="column"
-          justify="center"
-          alignItems="center"
-        >
-          <Typography variant="h5" color="primary">
-            I MADE THIS APP ON
-          </Typography>
-          <Typography variant="h3" color="primary">
-            #24HRSTARTUP
-          </Typography>
-          <Typography variant="h6">Powered by Foursquare</Typography>
-          <i className="fab fa-foursquare" />
+        <Grid container classes={{ container: classes.footerContainer }}>
+          <Grid item xs={12} sm={6}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              classes={{ container: classes.footerHeadingContainer }}
+            >
+              <Typography variant="h5" style={{ color: " white" }}>
+                I MADE THIS APP ON
+              </Typography>
+              <Typography variant="h3" color="primary" paragraph>
+                <a
+                  className={classes.link}
+                  href="https://24hrstartup.com/diego-robles"
+                >
+                  #24HRSTARTUP
+                </a>
+              </Typography>
+              <Typography variant="h5" style={{ color: " white" }}>
+                CHALLENGE
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              classes={{ container: classes.mediaContainer }}
+            >
+              <Typography variant="h5" color="primary">
+                Follow US!
+              </Typography>
+              <IconButton
+                color="primary"
+                href="https://www.instagram.com/noincomedev"
+                classes={{ root: classes.instagramButton }}
+              >
+                <i className="fab fa-instagram fa-3x" />
+              </IconButton>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={4}>
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                direction="column"
+                style={{ height: "100%" }}
+              >
+                <Typography variant="h6" style={{ color: "grey" }}>
+                  Powered by
+                </Typography>
+                <i
+                  className="fab fa-foursquare fa-2x"
+                  style={{ color: "white" }}
+                />
+                <Typography variant="subtitle1" style={{ color: "grey" }}>
+                  Foursquare
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item xs={8}>
+              <Grid
+                container
+                justify="center"
+                alignItems="flex-end"
+                direction="column"
+                style={{ height: "100%", padding: 8 }}
+              >
+                <Typography variant="subtitle1" style={{ color: "grey" }}>
+                  Developed by
+                </Typography>
+                <Typography variant="h6" style={{ color: "grey" }}>
+                  <a
+                    href="https://www.noincomedev.me"
+                    className={classes.whitelink}
+                  >
+                    NOINCOMEDEV
+                  </a>
+                </Typography>
+                <Grid container justify="flex-end">
+                  <IconButton
+                    color="secondary"
+                    href="https://www.instagram.com/noincomedev"
+                  >
+                    <i className="fab fa-instagram" />
+                  </IconButton>
+                  <IconButton
+                    color="secondary"
+                    href="https://www.twitter.com/noincomedev"
+                  >
+                    <i className="fab fa-twitter" />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Fragment>
     );
