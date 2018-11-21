@@ -9,9 +9,14 @@ type Profile {
   imgurl: String
 }
 
+input CoordsInput {
+  lat: Float!
+  lng: Float!
+}
+
 type Query {
   user: User
-  nearVenues(near: String): [Venue]
+  nearVenues(coords: CoordsInput!): [Venue]
 }
 
 input VoteInput {

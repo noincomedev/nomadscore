@@ -1,25 +1,27 @@
 import React, { Component, Fragment } from "react";
 import classNames from "classnames";
-import Geocode from "react-geocode";
-import gql from "graphql-tag";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { withRouter } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import withWidth, { isWidthDown, isWidthUp } from "@material-ui/core/withWidth";
+import Search from "@material-ui/icons/Search";
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 
-import Spinner from "../components/utils/Spinner";
+import SignupForm from "../components/forms/accounts/SignupForm";
+import SearchVenues from "../components/forms/SearchVenuesForm";
 
 const backgroundImgUrl =
   "https://images.unsplash.com/photo-1513258496099-48168024aec0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=73c00aaa6d23115d7fbe494c0cc1e5e3&auto=format&fit=crop&w=2100&q=80";
@@ -51,12 +53,12 @@ const styles = theme => ({
       paddingBottom: theme.spacing.unit * 4
     }
   },
+  dialogContent: {
+    background: theme.palette.background.default
+  },
   divider: {
     paddingBottom: theme.spacing.unit / 4,
     backgroundColor: theme.palette.secondary.light
-  },
-  focusedLabel: {
-    color: `${theme.palette.secondary.main} !important`
   },
   footerContainer: {
     background: theme.palette.primary.dark
@@ -115,16 +117,10 @@ const styles = theme => ({
   },
   iconDescription: { color: theme.palette.primary.dark },
   img: { height: "100%" },
-  imgWrapper: {
-    background: "red"
-  },
   instagramButton: {
     height: 50,
     width: 50,
     color: theme.palette.common.white
-  },
-  inputLabel: {
-    color: theme.palette.secondary.main
   },
   joinusContainer: {
     backgroundColor: theme.palette.primary.main,
@@ -150,11 +146,11 @@ const styles = theme => ({
   },
   mediaContainer: {
     height: "100%",
-    background: theme.palette.secondary.main
-  },
-  notchedOutline: {
-    borderColor: `${theme.palette.grey[600]} !important`,
-    color: theme.palette.common.white
+    background: theme.palette.secondary.main,
+    [theme.breakpoints.down("sm")]: {
+      paddingTop: theme.spacing.unit * 3,
+      paddingBottom: theme.spacing.unit * 3
+    }
   },
   quoteIcon: {
     fontSize: "3.5rem",
@@ -162,6 +158,9 @@ const styles = theme => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: "2.5rem"
     }
+  },
+  searchContainer: {
+    position: "absolute"
   },
   slogan: {
     color: theme.palette.common.white,
@@ -239,21 +238,13 @@ const tiles = [
   }
 ];
 
-const GET_NEAR_VENUES = gql`
-  query nearVenues {
-    nearVenues {
-      _id
-      name
-    }
-  }
-`;
-
 class LandingPage extends Component {
   state = {
     reveal: false,
     index: 0,
-    search: "",
-    loading: false
+    showDialog: false,
+    showSearch: false,
+    showAccounts: false
   };
 
   handleCarouselChange = index => {
@@ -266,25 +257,28 @@ class LandingPage extends Component {
     this.setState({ [name]: value });
   };
 
-  toggleLoading = () => this.setState({ loading: !this.state.loading });
+  closeDialog = () =>
+    this.setState({
+      showDialog: false,
+      showAccounts: false,
+      showSearch: false
+    });
 
-  findVenues = () => {
-    const { history } = this.props;
-    const { search } = this.state;
-    Geocode.fromAddress(search).then(
-      response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        history.push("/map", { near: search, lat, lng });
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  };
+  onSearchClick = () =>
+    this.setState({
+      showSearch: true,
+      showDialog: true
+    });
+
+  onJoinClick = () =>
+    this.setState({
+      showAccounts: true,
+      showDialog: true
+    });
 
   render() {
     const { classes, width } = this.props;
-    const { index, search, loading } = this.state;
+    const { index, showDialog, showAccounts, showSearch } = this.state;
     return (
       <Fragment>
         <Grid
@@ -333,52 +327,20 @@ class LandingPage extends Component {
                 variant={isWidthUp("md", width) ? "h5" : "subtitle1"}
                 align="center"
                 classes={{ root: classes.slogan }}
-                paragraph={isWidthDown("sm", width)}
               >
                 WITH FAST INTERNET
               </Typography>
-            </Grid>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <Grid container justify="center" spacing={8}>
-                <Grid item xs={8} md={6}>
-                  <TextField
-                    variant="outlined"
-                    id="search"
-                    value={search}
-                    label="Where are you going?"
-                    onChange={this.handleChange}
-                    placeholder="Chiang Mai, Thailand"
-                    fullWidth
-                    InputProps={{
-                      classes: { notchedOutline: classes.notchedOutline }
-                    }}
-                    InputLabelProps={{
-                      classes: {
-                        root: classes.inputLabel,
-                        focused: classes.focusedLabel
-                      }
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  md={1}
-                  style={{ display: "flex", alignItems: "center" }}
+              {!showSearch && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.onSearchClick}
                 >
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    fullWidth
-                    onClick={this.findVenues}
-                  >
-                    <i className="fas fa-search" />
-                  </Button>
-                </Grid>
-              </Grid>
-            )}
+                  Search
+                  <Search />
+                </Button>
+              )}
+            </Grid>
           </Grid>
         </Grid>
         <Grid
@@ -461,7 +423,12 @@ class LandingPage extends Component {
                   container
                   justify={isWidthUp("md", width) ? "flex-end" : "center"}
                 >
-                  <Avatar src={avatarSrc} classes={{ root: classes.avatar }} />
+                  <Avatar
+                    component={Paper}
+                    elevation={5}
+                    src={avatarSrc}
+                    classes={{ root: classes.avatar }}
+                  />
                 </Grid>
               </Grid>
               <Grid item xs={8} md={4}>
@@ -537,16 +504,19 @@ class LandingPage extends Component {
               >
                 NomadScore
               </Typography>
-              <Grid item xs={6} md={4}>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  size="large"
-                  fullWidth
-                >
-                  NOW
-                </Button>{" "}
-              </Grid>
+              {!showDialog && (
+                <Grid item xs={6} md={4}>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    onClick={this.onJoinClick}
+                  >
+                    NOW
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -583,16 +553,16 @@ class LandingPage extends Component {
               alignItems="center"
               classes={{ container: classes.mediaContainer }}
             >
-              <Typography variant="h5" color="primary">
-                Follow US!
-              </Typography>
               <IconButton
                 color="primary"
-                href="https://www.instagram.com/noincomedev"
+                href="https://www.instagram.com/nomadscoreapp"
                 classes={{ root: classes.instagramButton }}
               >
                 <i className="fab fa-instagram fa-3x" />
               </IconButton>
+              <Typography variant="h5" color="primary">
+                Follow our media!
+              </Typography>
             </Grid>
           </Grid>
           <Grid container>
@@ -653,6 +623,28 @@ class LandingPage extends Component {
             </Grid>
           </Grid>
         </Grid>
+        <Dialog
+          classes={{ paper: classes.dialogContainer }}
+          title={Meteor.userId() ? "Rate" : "Log In"}
+          open={showDialog}
+          onClose={this.closeDialog}
+          fullWidth
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title" style={{ padding: 4 }}>
+            {showSearch ? "Search" : "Create Account"}
+          </DialogTitle>
+          <Grid container>
+            <Grid item xs={12}>
+              <Divider classes={{ root: classes.divider }} />
+            </Grid>
+          </Grid>
+          <DialogContent classes={{ root: classes.dialogContent }}>
+            {showAccounts && <SignupForm />}
+            {showSearch && <SearchVenues />}
+          </DialogContent>
+        </Dialog>
       </Fragment>
     );
   }

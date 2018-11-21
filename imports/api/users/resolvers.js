@@ -5,26 +5,27 @@ export default {
     user(obj, args, { user }) {
       return user;
     },
-    nearVenues(obj, { near }, { user }) {
-      const result = HTTP.call(
+    nearVenues(obj, { coords }, { user }) {
+      const { lat, lng } = coords;
+      const venuesResult = HTTP.call(
         "GET",
         "https://api.foursquare.com/v2/venues/search",
         {
           params: {
             client_id: Meteor.settings.private.foursquare.CLIENT_ID,
             client_secret: Meteor.settings.private.foursquare.CLIENT_SECRET,
-            near,
+            ll: `${lat},${lng}`,
             categoryId:
               "4bf58dd8d48988d1f0941735,4bf58dd8d48988d174941735,4bf58dd8d48988d1ee931735",
             v: "20180323",
             limit: 25,
-            intent: "browse",
+            intent: "checkin",
             radius: 5000
           }
         }
       );
 
-      const { data } = result;
+      const { data } = venuesResult;
       const { venues } = data.response;
 
       const categoryids = [
@@ -44,12 +45,12 @@ export default {
         return category;
       };
 
-      return venues.map(venue => {
-        const category = getCategory(venue.categories);
+      return venues.map(item => {
+        const category = getCategory(item.categories);
         return {
-          _id: venue.id,
-          name: venue.name,
-          location: { lat: venue.location.lat, lng: venue.location.lng },
+          _id: item.id,
+          name: item.name,
+          location: { lat: item.location.lat, lng: item.location.lng },
           category
         };
       });

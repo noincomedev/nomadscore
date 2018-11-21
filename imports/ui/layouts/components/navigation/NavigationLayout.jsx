@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { PropTypes } from "prop-types";
 
 import AppBar from "@material-ui/core/AppBar";
+import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 
 import PrivateToolbar from "../../../components/navigation/toolbar/Private";
 import PublicToolbar from "../../../components/navigation/toolbar/Public";
+
+import SearchVenues from "../../../components/forms/SearchVenuesForm";
 
 const styles = theme => ({
   appBar: {
@@ -18,12 +21,23 @@ const styles = theme => ({
   logo: {
     color: theme.palette.common.white,
     textDecoration: "none"
+  },
+  searchContainer: {
+    position: "absolute",
+    zIndex: 1000,
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 72
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 108
+    }
   }
 });
 
 class NavigationLayout extends Component {
   state = {
-    open: false
+    open: false,
+    showSearch: false
   };
 
   toggleDrawer = () => {
@@ -35,19 +49,38 @@ class NavigationLayout extends Component {
     console.log("toggleDrawer");
   };
 
+  toggleSearch = () => {
+    this.setState({ showSearch: !this.state.showSearch });
+  };
+
   render() {
     const { classes } = this.props;
-    let { open } = this.state;
+    let { open, showSearch } = this.state;
     return (
-      <nav>
-        <AppBar position="fixed" color="secondary" className={classes.appBar}>
-          {Meteor.userId() ? (
-            <PrivateToolbar open={open} onToggleDrawer={this.toggleDrawer} />
-          ) : (
-            <PublicToolbar />
-          )}
-        </AppBar>
-      </nav>
+      <Fragment>
+        <nav>
+          <AppBar position="fixed" color="secondary" className={classes.appBar}>
+            {Meteor.userId() ? (
+              <PrivateToolbar
+                open={open}
+                onToggleDrawer={this.toggleDrawer}
+                onToggleSearch={this.toggleSearch}
+                showSearch={showSearch}
+              />
+            ) : (
+              <PublicToolbar
+                onToggleSearch={this.toggleSearch}
+                showSearch={showSearch}
+              />
+            )}
+          </AppBar>
+        </nav>
+        {showSearch && (
+          <Grid container classes={{ container: classes.searchContainer }}>
+            <SearchVenues onSelect={this.toggleSearch} />
+          </Grid>
+        )}
+      </Fragment>
     );
   }
 }

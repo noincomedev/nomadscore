@@ -1,17 +1,8 @@
 {
   "public": {
     "appName": "NomadScore",
-    "GEOCODING_API_KEY": "AIzaSyDNJXdn0gsxwN4cNF5NaMurO0roYImQ5dU",
-    "analyticsSettings": {
-      "Google Analytics": { "trackingId": "UA-129352003-1" }
-    },
-    "facebook": {
-      "APP_ID": "853588041657171",
-      "APP_SECRET": "994018aa325de5f55f80a49c3822d512"
-    },
     "google": {
-      "CLIENT_ID": "",
-      "APP_SECRET": ""
+      "API_KEY": "AIzaSyDNJXdn0gsxwN4cNF5NaMurO0roYImQ5dU"
     }
   },
   "private": {

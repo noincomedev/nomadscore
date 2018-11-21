@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
-import LoginButtons from "../../../components/accounts/LoginButtons";
+import AccountsForms from "../../components/accounts/AccountsFormsLayout";
 
 import RateHostel from "../../../components/forms/ratings/HostelRatingForm";
 import RateCowork from "../../../components/forms/ratings/CoworkRatingForm";
@@ -22,9 +22,6 @@ const styles = theme => ({
       height: "100%",
       justifyContent: "center"
     }
-  },
-  dialogContainer: {
-    background: theme.palette.grey[300]
   },
   divider: {
     paddingBottom: theme.spacing.unit / 3,
@@ -72,7 +69,7 @@ class ListItemLayout extends Component {
   };
 
   render() {
-    const { classes, item } = this.props;
+    const { classes, item, place } = this.props;
     const { showDialog, showButtons } = this.state;
     const { votes } = item;
     const voters = votes.map(vote => vote.owner);
@@ -99,11 +96,8 @@ class ListItemLayout extends Component {
               >
                 <Typography variant="h6" classes={{ root: classes.name }}>
                   {item.name.length > 15
-                    ? `${item.name.substring(0, 8)}...`
+                    ? `${item.name.substring(0, 16)}...`
                     : item.name}
-                </Typography>
-                <Typography variant="subtitle2" color="primary">
-                  {`Votes: ${votes.length}`}
                 </Typography>
                 {!voted && (
                   <Button
@@ -120,7 +114,6 @@ class ListItemLayout extends Component {
           </Grid>
         </Grid>
         <Dialog
-          classes={{ paper: classes.dialogContainer }}
           title={Meteor.userId() ? "Rate" : "Log In"}
           open={showDialog}
           onClose={this.toggleDialog}
@@ -142,7 +135,7 @@ class ListItemLayout extends Component {
               <Divider classes={{ root: classes.divider }} />
             </Grid>
           </Grid>
-          <DialogContent style={{ paddongTop: 4 }}>
+          <DialogContent style={{ paddingTop: 4 }}>
             {showButtons ? (
               <Grid container justify="center">
                 <Grid item xs={12}>
@@ -156,7 +149,7 @@ class ListItemLayout extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={10}>
-                  <LoginButtons onSuccess={this.toggleLoginButtons} />
+                  <AccountsForms place={place} />
                 </Grid>
               </Grid>
             ) : (

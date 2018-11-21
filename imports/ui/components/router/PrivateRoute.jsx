@@ -14,14 +14,14 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.default,
     marginTop: 64,
     flexDirection: "column",
-    minHeight: "100%"
-    // [theme.breakpoints.up("sm")]: {
-    //   marginTop: 64
-    // },
-    // [theme.breakpoints.down("xs")]: {
-    //   marginTop: 56,
-    //   marginLeft: 0
-    // },
+    minHeight: "100%",
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 64
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 56,
+      marginLeft: 0
+    }
     // [theme.breakpoints.up("md")]: {
     //   marginLeft: 60
     // },
