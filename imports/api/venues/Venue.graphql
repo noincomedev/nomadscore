@@ -1,20 +1,23 @@
-type Venue {
-  _id: ID
-  name: String
-  location: Location
-  category: Category
-  voteids: [ID]
-  votes: [Vote]
-}
-
-type Category {
-  _id: ID
-  name: String
-}
-
-type Location {
+type Coords {
+  address: String
   lat: Float
   lng: Float
+}
+
+type Score {
+  a: Float
+  b: Float
+}
+
+type Venue {
+  _id: ID
+  providerid: ID
+  name: String
+  location: Coords
+  photourl: String
+  score: Score
+  voted: Boolean
+  type: String
 }
 
 extend type Query {

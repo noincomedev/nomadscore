@@ -14,72 +14,27 @@ const Map = ReactMapboxGl({
 
 const styles = theme => ({
   bedIcon: {
-    color: theme.palette.common.white,
-    textShadow: `-1px 0 ${theme.palette.secondary.light}, 0 1px ${
-      theme.palette.secondary.light
-    }, 1px 0 ${theme.palette.secondary.light}, 0 -1px ${
-      theme.palette.secondary.light
-    }`
+    color: theme.palette.secondary.main,
+    textShadow: `-1px 0 white, 0 1px white, 1px 0 white, 0 -1px white`,
+    fontSize: "1.5rem"
   },
   coffeeIcon: {
-    color: theme.palette.common.white,
-    textShadow: `-1px 0 ${theme.palette.primary.dark}, 0 1px ${
-      theme.palette.primary.dark
-    }, 1px 0 ${theme.palette.primary.dark}, 0 -1px ${
-      theme.palette.primary.dark
-    }`
+    color: theme.palette.primary.light,
+    textShadow: `-1px 0 white, 0 1px white, 1px 0 white, 0 -1px white`,
+    fontSize: "1.5rem"
   },
   icon: {
     "&:hover": {
       zIndex: 1000
     }
   },
-  laptopIcon: {
-    color: theme.palette.primary.light,
-    textShadow: `-1px 0 ${theme.palette.secondary.main}, 0 1px ${
-      theme.palette.secondary.main
-    }, 1px 0 ${theme.palette.secondary.main}, 0 -1px ${
-      theme.palette.secondary.main
-    }`
-  },
   rootContainer: {
     flex: 1,
-    backgroundColor: theme.palette.primary.light
+    backgroundColor: theme.palette.primary.dark
   }
 });
 
-export default withStyles(styles)(({ classes, place, venues }) => {
-  const renderMarkerIcon = _id => {
-    switch (_id) {
-      case "4bf58dd8d48988d174941735":
-        return (
-          <i
-            className={classNames(
-              "fas fa-laptop",
-              classes.laptonIcon,
-              classes.icon
-            )}
-          />
-        );
-      case "4bf58dd8d48988d1f0941735":
-        return (
-          <i
-            className={classNames(
-              "fas fa-coffee",
-              classes.coffeeIcon,
-              classes.icon
-            )}
-          />
-        );
-      case "4bf58dd8d48988d1ee931735":
-        return (
-          <i
-            className={classNames("fas fa-bed", classes.bedIcon, classes.icon)}
-          />
-        );
-    }
-  };
-
+export default withStyles(styles)(({ classes, place, hostels, cafes }) => {
   return (
     <Grid
       container
@@ -94,26 +49,62 @@ export default withStyles(styles)(({ classes, place, venues }) => {
             width: "100%"
           }}
           center={[place.coords.lng, place.coords.lat]}
-          zoom={[11]}
+          zoom={[13]}
         >
-          {venues.map(venue => (
+          {hostels.map(hostel => (
             <Marker
-              key={venue._id}
-              coordinates={[venue.location.lng, venue.location.lat]}
+              key={hostel.providerid}
+              coordinates={[hostel.location.lng, hostel.location.lat]}
               anchor="bottom"
               className={classes.icon}
             >
-              {renderMarkerIcon(venue.category._id)}
+              <i
+                className={classNames(
+                  "fas fa-bed",
+                  classes.bedIcon,
+                  classes.icon
+                )}
+              />
+            </Marker>
+          ))}
+          {cafes.map(cafe => (
+            <Marker
+              key={cafe.providerid}
+              coordinates={[cafe.location.lng, cafe.location.lat]}
+              anchor="bottom"
+              className={classes.icon}
+            >
+              <i
+                className={classNames(
+                  "fas fa-coffee",
+                  classes.coffeeIcon,
+                  classes.icon
+                )}
+              />
             </Marker>
           ))}
         </Map>
       </div>
-      <Typography variant="caption" align="center" color="primary">
-        Searching near:
-      </Typography>
-      <Typography variant="h5" align="center" style={{ color: "white" }}>
-        {place.near}
-      </Typography>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        style={{ flex: 1 }}
+      >
+        <Typography
+          variant="caption"
+          align="center"
+          style={{
+            color: "rgb(29,233,182)"
+          }}
+        >
+          Searching near:
+        </Typography>
+        <Typography variant="h5" align="center" style={{ color: "white" }}>
+          {place.near}
+        </Typography>
+      </Grid>
     </Grid>
   );
 });

@@ -29,20 +29,16 @@ class SigninForm extends Component {
     let { email, password } = this.state;
     this.toggleLoading();
 
-    const { near, coords } = place;
-    const { lat, lng } = coords;
-
     Meteor.loginWithPassword(email, password, error => {
       if (!error) {
         if (place) {
-          client.resetStore(cb =>
-            history.push("/find/near", { near, lat, lng })
-          );
+          const { near, coords } = place;
+          client.resetStore();
+          history.push("/find/near", { near, coords });
         } else {
           client.resetStore(cb => history.push("/"));
         }
       }
-
       Bert.alert({
         title: error ? "Error!" : "Success",
         message: error ? error.reason : "You are now logged in",
@@ -50,8 +46,9 @@ class SigninForm extends Component {
         style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
         icon: error ? "fa-remove" : "fa-check"
       });
-      this.toggleLoading();
     });
+
+    this.toggleLoading();
   };
 
   toggleLoading = () => this.setState({ loading: !this.state.loading });
@@ -59,8 +56,9 @@ class SigninForm extends Component {
   render() {
     const { classes } = this.props;
     const { email, password, loading } = this.state;
-    if (loading) return <Spinner />;
-    return (
+    return loading ? (
+      <Spinner />
+    ) : (
       <Form onHandleSubmit={this.handleSubmit} style={{ width: "100%" }}>
         <Grid container justify="center">
           <Grid item xs={9}>

@@ -12,8 +12,16 @@ import VenueResolvers from "../../../api/venues/resolvers";
 import VoteSchema from "../../../api/votes/Vote.graphql";
 import VoteResolvers from "../../../api/votes/resolvers";
 
-const typeDefs = [UserSchema, VenueSchema, VoteSchema];
-const resolvers = merge(UserResolvers, VenueResolvers, VoteResolvers);
+import ResultSchema from "../../../api/results/Result.graphql";
+import ResultResolvers from "../../../api/results/resolvers";
+
+const typeDefs = [UserSchema, VenueSchema, VoteSchema, ResultSchema];
+const resolvers = merge(
+  UserResolvers,
+  VenueResolvers,
+  VoteResolvers,
+  ResultResolvers
+);
 
 const server = new ApolloServer({
   typeDefs,

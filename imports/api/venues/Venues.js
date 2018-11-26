@@ -1,60 +1,71 @@
 import { Mongo } from "meteor/mongo";
 import SimpleSchema from "simpl-schema";
 
-const Votes = new Mongo.Collection("votes");
+const Venues = new Mongo.Collection("venues");
 
-Votes.allow({
+Venues.allow({
   insert: () => false,
   update: () => false,
   remove: () => false
 });
 
-Votes.deny({
+Venues.deny({
   insert: () => true,
   update: () => true,
   remove: () => true
 });
 
-Votes.schema = new SimpleSchema({
+let coordsSchema = new SimpleSchema({
+  lat: Number,
+  lng: Number,
+  address: String
+});
+
+Venues.schema = new SimpleSchema({
   status: {
     type: Boolean,
     autoValue() {
       if (this.isInsert) return true;
     }
   },
+  providerid: {
+    type: String,
+    label: "Provider id",
+    optional: false
+  },
   createdAt: {
     type: String,
-    label: "The date this table was created.",
+    label: "The date this venue was created.",
     autoValue() {
       if (this.isInsert) return new Date().toISOString();
     }
   },
   updatedAt: {
     type: String,
-    label: "The date this table was last updated.",
+    label: "The date this venue was last updated.",
     optional: false,
     autoValue() {
       if (this.isInsert || this.isUpdate) return new Date().toISOString();
     }
   },
-  providerid: { type: String, optional: false },
-  owner: {
+  photourl: {
     type: String,
-    label: "Owner id",
+    optional: true
+  },
+  name: {
+    type: String,
     optional: false
   },
-  a: {
-    type: SimpleSchema.Integer,
-    label: "A",
+  location: {
+    type: coordsSchema,
     optional: false
   },
-  b: {
-    type: SimpleSchema.Integer,
-    label: "B",
+  type: {
+    type: String,
     optional: false
   }
 });
 
-Votes.attachSchema(Votes.schema);
+Venues.attachSchema(Venues.schema);
 
-export default Votes;
+export default Venues;

@@ -48,7 +48,7 @@ class SearchVenueForm extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         const { lat, lng } = latLng;
-        history.push("/find/near", { near, lat, lng });
+        history.push("/find/near", { near, coords: { lat, lng } });
       })
       .catch(error => console.error("Error", error));
   };

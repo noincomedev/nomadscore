@@ -13,23 +13,38 @@ import MobileLayout from "../layouts/app/MobileLayout";
 
 const styles = theme => ({});
 
-const GET_NEAR_VENUES = gql`
-  query nearVenues($coords: CoordsInput!) {
-    nearVenues(coords: $coords) {
-      _id
-      name
-      votes {
-        owner
-        a
-        b
-      }
-      category {
-        _id
+const GET_RESULTS = gql`
+  query search($coords: CoordsInput!) {
+    search(coords: $coords) {
+      cafes {
         name
+        photourl
+        location {
+          address
+          lat
+          lng
+        }
+        providerid
+        score {
+          a
+          b
+        }
+        type
       }
-      location {
-        lat
-        lng
+      hostels {
+        name
+        photourl
+        location {
+          address
+          lat
+          lng
+        }
+        providerid
+        score {
+          a
+          b
+        }
+        type
       }
     }
   }
@@ -38,21 +53,23 @@ const GET_NEAR_VENUES = gql`
 class ResultsPage extends Component {
   render() {
     const { classes, location, width } = this.props;
-    const { near, lat, lng } = location.state;
+    const { near, coords } = location.state;
     return (
-      <Query query={GET_NEAR_VENUES} variables={{ coords: { lat, lng } }}>
+      <Query query={GET_RESULTS} variables={{ coords }}>
         {({ loading, data, error }) => {
           if (loading) return <Spinner />;
           if (error) return `Error: ${error}`;
-          const { nearVenues } = data;
+          const { search } = data;
+          const { hostels, cafes } = search;
           return (
             <Grid container direction="column" style={{ flex: 1 }}>
               {isWidthUp("md", width) ? (
                 <h1>DESKTOP LAYOUT</h1>
               ) : (
                 <MobileLayout
-                  venues={nearVenues}
-                  place={{ near, coords: { lat, lng } }}
+                  hostels={hostels}
+                  cafes={cafes}
+                  place={{ near, coords }}
                 />
               )}
             </Grid>

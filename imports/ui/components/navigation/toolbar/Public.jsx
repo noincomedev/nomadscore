@@ -35,7 +35,7 @@ const styles = theme => ({
 const Public = ({ classes, location, showSearch, onToggleSearch }) => {
   const index = location.pathname == "/";
   return (
-    <Toolbar disableGutters>
+    <Toolbar disableGutters classes={{ root: classes.toolbar }}>
       <Grid container justify="space-between">
         <Typography
           className={classes.logo}

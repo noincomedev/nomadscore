@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 
 import SigninForm from "../../../components/forms/accounts/SigninForm";
 import SignupForm from "../../../components/forms/accounts/SignupForm";
@@ -24,16 +23,16 @@ class AccountsFormsLayout extends Component {
         ) : (
           <SignupForm place={place} />
         )}
-        {!showSignup && (
-          <Grid item xs={6} style={{ marginTop: 8 }}>
-            <Typography variant="caption" color="default" align="center">
-              Don't have an account?
-            </Typography>
-            <Button variant="text" color="secondary" onClick={this.toggleForm}>
-              Create Account
-            </Button>
-          </Grid>
-        )}
+        <Grid item xs={6} style={{ marginTop: 8 }}>
+          <Button
+            variant="text"
+            color="secondary"
+            fullWidth
+            onClick={this.toggleForm}
+          >
+            {showSignup ? "Log In" : "Create Account"}
+          </Button>
+        </Grid>
       </Grid>
     );
   }

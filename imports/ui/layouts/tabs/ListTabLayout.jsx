@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
+import GridList from "@material-ui/core/GridList";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Typography from "@material-ui/core/Typography";
 import Hotel from "@material-ui/icons/Hotel";
-import LaptopMac from "@material-ui/icons/LaptopMac";
 import LocalCafe from "@material-ui/icons/LocalCafe";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -18,15 +18,15 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.light
   },
   listContainer: {
-    maxHeight: "66vh"
+    position: "absolute"
   },
   rootContainer: {
     flex: 1,
-    padding: theme.spacing.unit,
+    position: "relative",
     overflow: "scroll"
   },
   tabs: {
-    color: theme.palette.secondary.light
+    color: theme.palette.primary.main
   },
   tabsContainer: {
     alignSelf: "flex-end"
@@ -43,39 +43,15 @@ class ListTabLayout extends Component {
   };
 
   render() {
-    const { classes, place, venues } = this.props;
+    const { classes, place, hostels, cafes } = this.props;
     const { tab } = this.state;
-
-    const coworkcategoryid = "4bf58dd8d48988d174941735";
-    const coffecategoryid = "4bf58dd8d48988d1f0941735";
-    const hostelcategoryid = "4bf58dd8d48988d1ee931735";
-
-    const hostels = [],
-      cafes = [],
-      coworks = [];
-
-    venues.filter(venue => {
-      switch (venue.category._id) {
-        case coworkcategoryid:
-          coworks.push(venue);
-          break;
-        case hostelcategoryid:
-          hostels.push(venue);
-          break;
-        case coffecategoryid:
-          cafes.push(venue);
-          break;
-      }
-    });
 
     const renderTitle = tab => {
       switch (tab) {
         case 0:
           return "Hostels";
         case 1:
-          return "Internet Cafes";
-        case 2:
-          return "Coworks";
+          return "Cafes";
       }
     };
 
@@ -83,33 +59,33 @@ class ListTabLayout extends Component {
       switch (tab) {
         case 0:
           return (
-            <Grid container classes={{ container: classes.listContainer }}>
-              {hostels.map(hostel => (
-                <Grid key={hostel._id} item xs={12}>
-                  <Item item={hostel} place={place} />
-                </Grid>
+            <GridList cols={1} classes={{ root: classes.listContainer }}>
+              {hostels.map((hostel, index) => (
+                <Item
+                  hidden={index > 2}
+                  key={hostel.providerid}
+                  item={hostel}
+                  place={place}
+                />
               ))}
-            </Grid>
+            </GridList>
           );
         case 1:
           return (
-            <Grid container classes={{ container: classes.listContainer }}>
-              {cafes.map(cafe => (
-                <Grid key={cafe._id} item xs={12}>
-                  <Item item={cafe} place={place} />
-                </Grid>
+            <GridList
+              cellHeight={45}
+              cols={1}
+              classes={{ root: classes.listContainer }}
+            >
+              {cafes.map((cafe, index) => (
+                <Item
+                  hidden={index > 2}
+                  key={cafe.providerid}
+                  item={cafe}
+                  place={place}
+                />
               ))}
-            </Grid>
-          );
-        case 2:
-          return (
-            <Grid container classes={{ container: classes.listContainer }}>
-              {coworks.map(cowork => (
-                <Grid key={cowork._id} item xs={12}>
-                  <Item item={cowork} place={place} />
-                </Grid>
-              ))}
-            </Grid>
+            </GridList>
           );
       }
     };
@@ -123,7 +99,7 @@ class ListTabLayout extends Component {
       >
         <Grid container style={{ padding: 8 }}>
           <Grid item xs={12}>
-            <Typography variant="h4" color="primary">
+            <Typography variant="h4" color="default">
               {renderTitle(tab)}
             </Typography>
             <Divider classes={{ root: classes.divider }} />
@@ -152,7 +128,6 @@ class ListTabLayout extends Component {
           >
             <Tab label={<Hotel />} />
             <Tab label={<LocalCafe />} />
-            <Tab label={<LaptopMac />} />
           </Tabs>
         </Grid>
       </Grid>

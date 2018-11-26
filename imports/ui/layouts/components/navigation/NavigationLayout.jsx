@@ -58,8 +58,8 @@ class NavigationLayout extends Component {
     let { open, showSearch } = this.state;
     return (
       <Fragment>
-        <nav>
-          <AppBar position="fixed" color="secondary" className={classes.appBar}>
+        <nav className={classes.navContainer}>
+          <AppBar position="fixed" color="primary" className={classes.appBar}>
             {Meteor.userId() ? (
               <PrivateToolbar
                 open={open}

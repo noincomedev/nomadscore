@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import classNames from "classnames";
 import { Helmet } from "react-helmet";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, withRouter } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -54,10 +54,13 @@ class PrivateRoute extends Component {
       exact,
       name,
       path,
-      title
+      title,
+      location,
+      history
     } = this.props;
     const { open } = this.state;
-    if (!Meteor.userId()) return <Redirect to="/" />;
+    const { state } = location;
+    if (!Meteor.userId()) history.push("/accounts", { ...state });
     return (
       <Route
         exact={exact}
@@ -90,4 +93,6 @@ PrivateRoute.propTypes = {
   title: PropTypes.string
 };
 
-export default withStyles(styles, { withTheme: true })(PrivateRoute);
+export default withStyles(styles, { withTheme: true })(
+  withRouter(PrivateRoute)
+);

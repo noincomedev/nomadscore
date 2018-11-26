@@ -2,6 +2,11 @@ import Votes from "../votes/Votes";
 
 export default {
   Venue: {
-    votes: venue => Votes.find({ venueid: venue._id }).fetch()
+    score: venue => {
+      return {
+        a: Math.floor(Math.random() * 4 + 1),
+        b: Math.round(Math.random() * 4 + 1)
+      };
+    }
   }
 };

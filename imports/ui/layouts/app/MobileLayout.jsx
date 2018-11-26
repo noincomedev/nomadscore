@@ -14,11 +14,15 @@ import ListTab from "../tabs/ListTabLayout";
 import MapTab from "../tabs/MapTabLayout";
 
 const styles = theme => ({
+  indicator: {
+    color: theme.palette.custom.accent,
+    backgroundColor: theme.palette.custom.accent
+  },
   rootContainer: {
     flex: 1
   },
   tabs: {
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.primary.light,
     color: theme.palette.common.white
   }
 });
@@ -33,14 +37,14 @@ class MobileLayout extends Component {
   };
 
   render() {
-    const { classes, place, venues } = this.props;
+    const { classes, place, hostels, cafes } = this.props;
     const { tab } = this.state;
     const renderTab = () => {
       switch (tab) {
         case 0:
-          return <MapTab place={place} venues={venues} />;
+          return <MapTab place={place} hostels={hostels} cafes={cafes} />;
         case 1:
-          return <ListTab place={place} venues={venues} />;
+          return <ListTab place={place} hostels={hostels} cafes={cafes} />;
         case 2:
           return <FavoritesTab />;
       }
@@ -54,10 +58,10 @@ class MobileLayout extends Component {
         <Tabs
           value={tab}
           onChange={this.handleTabChange}
-          indicatorColor="primary"
+          indicatorColor="secondary"
           fullWidth
           centered
-          classes={{ root: classes.tabs }}
+          classes={{ root: classes.tabs, indicator: classes.indicator }}
         >
           <Tab label={<Map />} />
           <Tab label={<ViewList />} />
@@ -77,7 +81,8 @@ class MobileLayout extends Component {
 
 MobileLayout.propTypes = {
   place: PropTypes.object.isRequired,
-  venues: PropTypes.array
+  hostels: PropTypes.array,
+  cafes: PropTypes.array
 };
 
 export default withStyles(styles)(MobileLayout);

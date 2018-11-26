@@ -2,6 +2,7 @@ type User {
   _id: ID
   admin: Boolean
   profile: Profile
+  prospect: Boolean
 }
 
 type Profile {
@@ -14,17 +15,19 @@ input CoordsInput {
   lng: Float!
 }
 
-type Query {
-  user: User
-  nearVenues(coords: CoordsInput!): [Venue]
-}
-
 input VoteInput {
   venueid: ID
   a: Int
   b: Int
 }
 
+type Query {
+  user: User
+  search(coords: CoordsInput!): Result
+  voted(providerid: ID!): Venue
+}
+
 type Mutation {
   submitVote(vote: VoteInput!): Venue
+  setAsProspect: User
 }

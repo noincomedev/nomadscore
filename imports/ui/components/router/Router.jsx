@@ -9,9 +9,11 @@ import theme from "../../../assets/theme";
 import ScrollTop from "../utils/ScrollTop";
 import Spinner from "../utils/Spinner";
 
-import PublicRoute from "./PublicRoute";
 import MultiRoute from "./MultiRoute";
+import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./PrivateRoute";
 
+import AccountsPage from "../../pages/AccountsPage";
 import LandingPage from "../../pages/LandingPage";
 import ResultsPage from "../../pages/ResultsPage";
 import NotFound from "../../pages/NotFound";
@@ -31,13 +33,21 @@ const Router = ({ loading, user }) => {
               content="index"
               title="Home"
             />
-            <MultiRoute
+            <PrivateRoute
               exact
               path="/find/near"
               content="map-venues"
               name="results"
               title="Results"
               component={ResultsPage}
+            />
+            <MultiRoute
+              exact
+              path="/accounts"
+              content="accounts"
+              name="accounts"
+              title="Accounts"
+              component={AccountsPage}
             />
             <PublicRoute
               component={NotFound}
@@ -56,6 +66,7 @@ const CURRENT_USER = gql`
   query currentUser {
     user {
       _id
+      prospect
     }
   }
 `;

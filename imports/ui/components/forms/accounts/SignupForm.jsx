@@ -32,10 +32,6 @@ class SignupForm extends Component {
       password
     };
     this.toggleLoading();
-
-    const { near, coords } = place;
-    const { lat, lng } = coords;
-
     Accounts.createUser(params, error => {
       Bert.alert({
         title: error ? "Error!" : "Success",
@@ -46,11 +42,11 @@ class SignupForm extends Component {
       });
       if (!error) {
         if (place) {
-          client
-            .resetStore()
-            .then(history.push("/find/near", { near, lat, lng }));
+          const { near, coords } = place;
+          client.resetStore();
+          history.push("/find/near", { near, coords });
         } else {
-          client.resetStore().then(history.push("/"));
+          client.resetStore(cd => history.push("/"));
         }
       }
     });

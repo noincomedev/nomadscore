@@ -16,7 +16,7 @@ let Spinner = ({ classes, color, size }) => (
   <Grid container justify="center" classes={{ container: classes.container }}>
     <CircularProgress
       size={size ? size : 50}
-      color={color ? color : "secondary"}
+      style={{ color: color ? color : "#673ab7" }}
       variant="indeterminate"
     />
   </Grid>

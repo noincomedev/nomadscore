@@ -61,7 +61,9 @@ class Private extends Component {
       <Fragment>
         <Toolbar
           disableGutters
-          className={classNames(open && classes.drawerOpen)}
+          classes={{
+            root: classNames(open && classes.drawerOpen, classes.toolbar)
+          }}
         >
           <Grid container justify="space-between">
             <Typography

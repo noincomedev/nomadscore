@@ -5,63 +5,36 @@ export default {
     user(obj, args, { user }) {
       return user;
     },
-    nearVenues(obj, { coords }, { user }) {
-      const { lat, lng } = coords;
-      const venuesResult = HTTP.call(
-        "GET",
-        "https://api.foursquare.com/v2/venues/search",
-        {
-          params: {
-            client_id: Meteor.settings.private.foursquare.CLIENT_ID,
-            client_secret: Meteor.settings.private.foursquare.CLIENT_SECRET,
-            ll: `${lat},${lng}`,
-            categoryId:
-              "4bf58dd8d48988d1f0941735,4bf58dd8d48988d174941735,4bf58dd8d48988d1ee931735",
-            v: "20180323",
-            limit: 25,
-            intent: "checkin",
-            radius: 5000
-          }
-        }
-      );
-
-      const { data } = venuesResult;
-      const { venues } = data.response;
-
-      const categoryids = [
-        "4bf58dd8d48988d1f0941735",
-        "4bf58dd8d48988d174941735",
-        "4bf58dd8d48988d1ee931735"
-      ];
-
-      const getCategory = categories => {
-        const category = { name: "", _id: "" };
-        categories.forEach(cat => {
-          if (categoryids.includes(cat.id)) {
-            category.name = cat.name;
-            category._id = cat.id;
-          }
-        });
-        return category;
-      };
-
-      return venues.map(item => {
-        const category = getCategory(item.categories);
+    search(obj, { coords }, { user }) {
+      return { coords };
+    },
+    voted(obj, { providerid }, { user }) {
+      if (user) {
+        console.log(
+          Votes.find({ owner: user._id, providerid }).fetch().length > 0
+        );
         return {
-          _id: item.id,
-          name: item.name,
-          location: { lat: item.location.lat, lng: item.location.lng },
-          category
+          voted: Votes.find({ owner: user._id, providerid }).fetch().length > 0
         };
-      });
+      }
+      return { voted: false };
     }
   },
   Mutation: {
     submitVote(obj, { vote }, { user }) {
       if (user) {
         const { venueid, a, b } = vote;
-        const voteid = Votes.insert({ owner: user._id, venueid, a, b });
-        return { _id: voteid };
+        return Votes.insert({ owner: user._id, providerid: venueid, a, b });
+      }
+      throw new Error("unauthorized");
+    },
+    setAsProspect(obj, args, { user }) {
+      if (user) {
+        const userid = Meteor.users.update(
+          { _id: user._id },
+          { $set: { profile: { prospect: true } } }
+        );
+        return Meteor.users.findOne({ _id: user._id });
       }
       throw new Error("unauthorized");
     }
@@ -71,6 +44,10 @@ export default {
     profile: user => {
       const { profile } = user;
       return profile;
+    },
+    prospect: ({ profile }) => {
+      const { prospect } = profile;
+      return prospect;
     }
   }
 };
