@@ -21,6 +21,24 @@ let coordsSchema = new SimpleSchema({
   address: String
 });
 
+let voteSchema = new SimpleSchema({
+  owner: {
+    type: String,
+    label: "Owner id",
+    optional: false
+  },
+  a: {
+    type: SimpleSchema.Integer,
+    label: "A",
+    optional: false
+  },
+  b: {
+    type: SimpleSchema.Integer,
+    label: "B",
+    optional: false
+  }
+});
+
 Venues.schema = new SimpleSchema({
   status: {
     type: Boolean,
@@ -63,7 +81,9 @@ Venues.schema = new SimpleSchema({
   type: {
     type: String,
     optional: false
-  }
+  },
+  votes: { type: Array, optional: true },
+  "votes.$": { type: voteSchema, optional: true }
 });
 
 Venues.attachSchema(Venues.schema);

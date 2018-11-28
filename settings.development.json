@@ -3,6 +3,9 @@
     "appName": "NomadScore",
     "google": {
       "API_KEY": "AIzaSyDNJXdn0gsxwN4cNF5NaMurO0roYImQ5dU"
+    },
+    "error": {
+      "DAILY_LIMIT": "daily-limit-reached"
     }
   },
   "private": {

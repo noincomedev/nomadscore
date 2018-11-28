@@ -14,7 +14,8 @@ import Spinner from "../../utils/Spinner";
 
 const styles = theme => ({
   button: {
-    padding: theme.spacing.unit / 4
+    padding: theme.spacing.unit / 4,
+    fontSize: "1.89rem"
   },
   greenButton: {
     color: "green",
@@ -118,7 +119,7 @@ class CafeRatingForm extends Component {
                   }}
                   size="small"
                 >
-                  <i className="far fa-frown" />
+                  😕
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -133,7 +134,7 @@ class CafeRatingForm extends Component {
                     this.updateRate("taste", 3);
                   }}
                 >
-                  <i className="far fa-meh" />
+                  🙂
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -148,7 +149,7 @@ class CafeRatingForm extends Component {
                     this.updateRate("taste", 5);
                   }}
                 >
-                  <i className="far fa-smile" />
+                  😃
                 </IconButton>
               </Grid>
             </Grid>
@@ -193,7 +194,7 @@ class CafeRatingForm extends Component {
                   }}
                   size="small"
                 >
-                  <i className="far fa-frown" />
+                  😕
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -208,7 +209,7 @@ class CafeRatingForm extends Component {
                     this.updateRate("wifi", 3);
                   }}
                 >
-                  <i className="far fa-meh" />
+                  🙂
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -223,7 +224,7 @@ class CafeRatingForm extends Component {
                     this.updateRate("wifi", 5);
                   }}
                 >
-                  <i className="far fa-smile" />
+                  😃
                 </IconButton>
               </Grid>
             </Grid>

@@ -117,7 +117,7 @@ const styles = theme => ({
   footerHeadingContainer: {
     height: "100%",
     padding: theme.spacing.unit * 3,
-    background: theme.palette.grey[300]
+    background: theme.palette.background.default
   },
   gridList: {
     flexWrap: "nowrap",
@@ -577,7 +577,7 @@ class LandingPage extends Component {
             >
               <img
                 src={
-                  isWidthUp("sm", width)
+                  isWidthUp("md", width)
                     ? "/assets/macbook.png"
                     : "/assets/devices.png"
                 }
@@ -639,9 +639,14 @@ class LandingPage extends Component {
                 justify="flex-end"
                 style={{ alignContent: "center" }}
               >
-                <Grid item xs={8} style={{ padding: "16px 0px 16px 16px" }}>
+                <Grid
+                  item
+                  xs={8}
+                  sm={6}
+                  style={{ padding: "16px 0px 16px 16px" }}
+                >
                   <Grid container justify="flex-end">
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={8}>
                       <Typography variant="h6" align="right">
                         Diego Robles
                       </Typography>
@@ -654,12 +659,12 @@ class LandingPage extends Component {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={4} md={2}>
+                <Grid item xs={4}>
                   <Grid
                     container
-                    justify={isWidthUp("md", width) ? "flex-end" : "center"}
+                    justify="flex-start"
                     alignItems="center"
-                    style={{ height: "100%" }}
+                    style={{ height: "100%", padding: 8 }}
                   >
                     <Avatar
                       component={Paper}
@@ -1011,27 +1016,7 @@ class LandingPage extends Component {
           </Grid>
         </Grid>
         <Grid container classes={{ container: classes.footerContainer }}>
-          <Grid container>
-            <Grid item xs={4}>
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                direction="column"
-                style={{ height: "100%" }}
-              >
-                <Typography variant="h6" style={{ color: "grey" }}>
-                  Powered by
-                </Typography>
-                <i
-                  className="fab fa-foursquare fa-2x"
-                  style={{ color: "white" }}
-                />
-                <Typography variant="subtitle1" style={{ color: "grey" }}>
-                  Foursquare
-                </Typography>
-              </Grid>
-            </Grid>
+          <Grid container justify="flex-end">
             <Grid item xs={8}>
               <Grid
                 container

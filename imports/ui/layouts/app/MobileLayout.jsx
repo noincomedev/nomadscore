@@ -37,14 +37,21 @@ class MobileLayout extends Component {
   };
 
   render() {
-    const { classes, place, hostels, cafes } = this.props;
+    const { classes, place, hostels, cafes, refetch } = this.props;
     const { tab } = this.state;
     const renderTab = () => {
       switch (tab) {
         case 0:
           return <MapTab place={place} hostels={hostels} cafes={cafes} />;
         case 1:
-          return <ListTab place={place} hostels={hostels} cafes={cafes} />;
+          return (
+            <ListTab
+              place={place}
+              hostels={hostels}
+              cafes={cafes}
+              refetch={refetch}
+            />
+          );
         case 2:
           return <FavoritesTab />;
       }
@@ -82,7 +89,8 @@ class MobileLayout extends Component {
 MobileLayout.propTypes = {
   place: PropTypes.object.isRequired,
   hostels: PropTypes.array,
-  cafes: PropTypes.array
+  cafes: PropTypes.array,
+  refetch: PropTypes.func
 };
 
 export default withStyles(styles)(MobileLayout);

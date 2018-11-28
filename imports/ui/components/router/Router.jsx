@@ -16,6 +16,7 @@ import PrivateRoute from "./PrivateRoute";
 import AccountsPage from "../../pages/AccountsPage";
 import LandingPage from "../../pages/LandingPage";
 import ResultsPage from "../../pages/ResultsPage";
+import ScalePage from "../../pages/ScalePage";
 import NotFound from "../../pages/NotFound";
 
 const Router = ({ loading, user }) => {
@@ -40,6 +41,17 @@ const Router = ({ loading, user }) => {
               name="results"
               title="Results"
               component={ResultsPage}
+              user={user}
+              loading={loading}
+            />
+            <PrivateRoute
+              exact
+              path="/scale"
+              content="map-venues"
+              name="scale"
+              title="Sorry!"
+              component={ScalePage}
+              user={user}
             />
             <MultiRoute
               exact

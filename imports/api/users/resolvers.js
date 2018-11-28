@@ -1,4 +1,4 @@
-import Votes from "../votes/Votes";
+import Venues from "../venues/Venues";
 
 export default {
   Query: {
@@ -6,15 +6,39 @@ export default {
       return user;
     },
     search(obj, { coords }, { user }) {
-      return { coords };
+      const { profile } = user;
+      const { lastSearch } = profile;
+      let restricted = false;
+      if (Meteor.isDevelopment) {
+        return { coords };
+      }
+      if (lastSearch) {
+        const prevDate = new Date(lastSearch);
+        const today = new Date();
+        const diff = Math.abs(today.getTime() - prevDate.getTime());
+        restricted = diff / (1000 * 60 * 60).toFixed(1) < 24;
+      }
+      if (restricted) {
+        throw new Error(Meteor.settings.public.error.DAILY_LIMIT);
+      } else {
+        const updatedProfile = {
+          ...profile,
+          lastSearch: new Date()
+        };
+        Meteor.users.update(
+          { _id: user._id },
+          { $set: { profile: updatedProfile } }
+        );
+        return { coords };
+      }
     },
     voted(obj, { providerid }, { user }) {
       if (user) {
-        console.log(
-          Votes.find({ owner: user._id, providerid }).fetch().length > 0
-        );
+        const venue = Venues.findOne({ providerid });
+        const { votes } = venue;
+        const voteids = votes.map(vote => vote.owner);
         return {
-          voted: Votes.find({ owner: user._id, providerid }).fetch().length > 0
+          voted: voteids.includes(user._id)
         };
       }
       return { voted: false };
@@ -23,16 +47,28 @@ export default {
   Mutation: {
     submitVote(obj, { vote }, { user }) {
       if (user) {
-        const { venueid, a, b } = vote;
-        return Votes.insert({ owner: user._id, providerid: venueid, a, b });
+        return Venues.update(
+          { providerid: vote.venueid },
+          {
+            $addToSet: {
+              votes: {
+                owner: user._id,
+                a: vote.a,
+                b: vote.b
+              }
+            }
+          }
+        );
       }
       throw new Error("unauthorized");
     },
     setAsProspect(obj, args, { user }) {
       if (user) {
+        const { profile } = user;
+        profile.prospect = true;
         const userid = Meteor.users.update(
           { _id: user._id },
-          { $set: { profile: { prospect: true } } }
+          { $set: { profile: { ...profile } } }
         );
         return Meteor.users.findOne({ _id: user._id });
       }
@@ -47,7 +83,7 @@ export default {
     },
     prospect: ({ profile }) => {
       const { prospect } = profile;
-      return prospect;
+      return prospect ? prospect : false;
     }
   }
 };

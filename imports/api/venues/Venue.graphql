@@ -9,6 +9,13 @@ type Score {
   b: Float
 }
 
+type Vote {
+  owner: ID
+  venueid: ID
+  a: Int
+  b: Int
+}
+
 type Venue {
   _id: ID
   providerid: ID
@@ -18,6 +25,7 @@ type Venue {
   score: Score
   voted: Boolean
   type: String
+  votes: [Vote]
 }
 
 extend type Query {

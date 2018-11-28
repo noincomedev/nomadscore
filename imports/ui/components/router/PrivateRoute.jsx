@@ -7,6 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 
 import NavigationLayout from "../../layouts/components/navigation/NavigationLayout";
 
+import Spinner from "../utils/Spinner";
+
 const styles = theme => ({
   main: {
     display: "flex",
@@ -56,7 +58,9 @@ class PrivateRoute extends Component {
       path,
       title,
       location,
-      history
+      history,
+      user,
+      loading
     } = this.props;
     const { open } = this.state;
     const { state } = location;
@@ -75,7 +79,10 @@ class PrivateRoute extends Component {
             <main
               className={classNames(classes.main, open && classes.openDrawer)}
             >
-              {React.createElement(component)}
+              {React.cloneElement(React.createElement(component), {
+                user,
+                loading
+              })}
             </main>
           </Fragment>
         )}

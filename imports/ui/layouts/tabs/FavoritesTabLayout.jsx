@@ -8,7 +8,8 @@ export default () => (
   <Grid container direction="column" justify="center" style={{ flex: 1 }}>
     <Typography variant="h4" align="center">
       Soon you will be able to <br />
-      <Star style={{ fontSize: "4rem", color: "rgb(29,233,182)" }} />
+      <Star style={{ fontSize: "4rem", color: "rgb(29,233,182)" }} /> <br />
+      your favorite places.
     </Typography>
   </Grid>
 );

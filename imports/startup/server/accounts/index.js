@@ -1,7 +1,8 @@
 Accounts.onCreateUser((options, user) => {
-  const prospect = {
-    prospect: false
+  const profile = {
+    prospect: false,
+    restricted: false
   };
-  user.profile = prospect;
+  user.profile = profile;
   return user;
 });

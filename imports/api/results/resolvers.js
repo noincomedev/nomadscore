@@ -4,7 +4,7 @@ export default {
   Result: {
     cafes: search => {
       if (Meteor.isDevelopment) {
-        return Venues.find({}, { limit: 15 }).fetch();
+        return Venues.find({ type: "cafe" }, { limit: 8 }).fetch();
       }
 
       const { lat, lng } = search.coords;
@@ -63,13 +63,14 @@ export default {
           photourl:
             venue.photos.count > 0
               ? `${venue.bestPhoto.prefix}500x300${venue.bestPhoto.suffix}`
-              : "placeholder",
+              : "/assets/placeholder.png",
           location: {
             address: parseAddress(venue.location),
             lat: venue.location.lat,
             lng: venue.location.lng
           },
-          type: "cafe"
+          type: "cafe",
+          votes: []
         };
       });
 
@@ -82,7 +83,7 @@ export default {
     },
     hostels: search => {
       if (Meteor.isDevelopment) {
-        return Venues.find({}, { limit: 15 }).fetch();
+        return Venues.find({ type: "hostel" }, { limit: 8 }).fetch();
       }
 
       const { lat, lng } = search.coords;
@@ -141,13 +142,14 @@ export default {
           photourl:
             venue.photos.count > 0
               ? `${venue.bestPhoto.prefix}500x300${venue.bestPhoto.suffix}`
-              : "placeholder",
+              : "/assets/placeholder.png",
           location: {
             address: parseAddress(venue.location),
             lat: venue.location.lat,
             lng: venue.location.lng
           },
-          type: "hostel"
+          type: "hostel",
+          votes: []
         };
       });
 

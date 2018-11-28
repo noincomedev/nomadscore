@@ -13,6 +13,12 @@ import { withStyles } from "@material-ui/core/styles";
 import Item from "../components/lists/ListItemLayout";
 
 const styles = theme => ({
+  rootContainer: {
+    flex: 1,
+    [theme.breakpoints.up("sm")]: {
+      height: "92.6vh"
+    }
+  },
   divider: {
     paddingBottom: theme.spacing.unit / 3,
     backgroundColor: theme.palette.primary.light
@@ -20,7 +26,7 @@ const styles = theme => ({
   listContainer: {
     position: "absolute"
   },
-  rootContainer: {
+  tabContainer: {
     flex: 1,
     position: "relative",
     overflow: "scroll"
@@ -43,7 +49,7 @@ class ListTabLayout extends Component {
   };
 
   render() {
-    const { classes, place, hostels, cafes } = this.props;
+    const { classes, place, hostels, cafes, refetch } = this.props;
     const { tab } = this.state;
 
     const renderTitle = tab => {
@@ -63,9 +69,10 @@ class ListTabLayout extends Component {
               {hostels.map((hostel, index) => (
                 <Item
                   hidden={index > 2}
-                  key={hostel.providerid}
+                  key={hostel._id}
                   item={hostel}
                   place={place}
+                  refetch={refetch}
                 />
               ))}
             </GridList>
@@ -80,9 +87,10 @@ class ListTabLayout extends Component {
               {cafes.map((cafe, index) => (
                 <Item
                   hidden={index > 2}
-                  key={cafe.providerid}
+                  key={cafe._id}
                   item={cafe}
                   place={place}
+                  refetch={refetch}
                 />
               ))}
             </GridList>
@@ -95,7 +103,7 @@ class ListTabLayout extends Component {
         container
         direction="column"
         justify="space-between"
-        style={{ flex: 1 }}
+        classes={{ container: classes.rootContainer }}
       >
         <Grid container style={{ padding: 8 }}>
           <Grid item xs={12}>
@@ -109,7 +117,7 @@ class ListTabLayout extends Component {
           container
           alignItems="flex-start"
           alignContent="flex-start"
-          classes={{ container: classes.rootContainer }}
+          classes={{ container: classes.tabContainer }}
         >
           {renderTab()}
         </Grid>

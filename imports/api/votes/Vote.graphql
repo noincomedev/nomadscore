@@ -1,6 +1,0 @@
-type Vote {
-  owner: ID
-  venueid: ID
-  a: Int
-  b: Int
-}

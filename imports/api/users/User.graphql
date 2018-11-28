@@ -8,6 +8,7 @@ type User {
 type Profile {
   name: String
   imgurl: String
+  lastSearch: String
 }
 
 input CoordsInput {
@@ -25,6 +26,7 @@ type Query {
   user: User
   search(coords: CoordsInput!): Result
   voted(providerid: ID!): Venue
+  restricted: User
 }
 
 type Mutation {

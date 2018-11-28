@@ -31,13 +31,14 @@ class SigninForm extends Component {
 
     Meteor.loginWithPassword(email, password, error => {
       if (!error) {
-        if (place) {
-          const { near, coords } = place;
-          client.resetStore();
-          history.push("/find/near", { near, coords });
-        } else {
-          client.resetStore(cb => history.push("/"));
-        }
+        client.resetStore().then(() => {
+          if (place) {
+            const { near, coords } = place;
+            history.push("/find/near", { near, coords });
+          } else {
+            history.push("/");
+          }
+        });
       }
       Bert.alert({
         title: error ? "Error!" : "Success",

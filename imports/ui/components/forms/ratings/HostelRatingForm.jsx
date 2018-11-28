@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import gql from "graphql-tag";
-import { Bert } from "meteor/themeteorchef:bert";
 import { graphql } from "react-apollo";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import Hotel from "@material-ui/icons/Hotel";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 
-import Spinner from "../../utils/Spinner";
-
 const styles = theme => ({
   button: {
-    padding: theme.spacing.unit / 4
+    padding: theme.spacing.unit / 4,
+    fontSize: "1.89rem"
   },
   greenButton: {
     color: "green",
@@ -76,8 +75,7 @@ class HostelRatingForm extends Component {
 
   render() {
     const { classes } = this.props;
-    const { bed, wifi, loading } = this.state;
-    if (loading) return <Spinner />;
+    const { bed, wifi } = this.state;
     return (
       <Grid container>
         <Grid
@@ -95,7 +93,7 @@ class HostelRatingForm extends Component {
                 justify="center"
                 alignItems="center"
               >
-                <i className="fas fa-bed fa-2x" />
+                <Hotel />
               </Grid>
             </Grid>
             <Grid item xs={10}>
@@ -119,7 +117,7 @@ class HostelRatingForm extends Component {
                   }}
                   size="small"
                 >
-                  <i className="far fa-frown" />
+                  😕
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -134,7 +132,7 @@ class HostelRatingForm extends Component {
                     this.updateRate("bed", 3);
                   }}
                 >
-                  <i className="far fa-meh" />
+                  🙂
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -149,7 +147,7 @@ class HostelRatingForm extends Component {
                     this.updateRate("bed", 5);
                   }}
                 >
-                  <i className="far fa-smile" />
+                  😃
                 </IconButton>
               </Grid>
             </Grid>
@@ -194,7 +192,7 @@ class HostelRatingForm extends Component {
                   }}
                   size="small"
                 >
-                  <i className="far fa-frown" />
+                  😕
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -209,7 +207,7 @@ class HostelRatingForm extends Component {
                     this.updateRate("wifi", 3);
                   }}
                 >
-                  <i className="far fa-meh" />
+                  🙂
                 </IconButton>
                 <IconButton
                   variant="text"
@@ -224,7 +222,7 @@ class HostelRatingForm extends Component {
                     this.updateRate("wifi", 5);
                   }}
                 >
-                  <i className="far fa-smile" />
+                  😃
                 </IconButton>
               </Grid>
             </Grid>

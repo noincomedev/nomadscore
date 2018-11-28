@@ -10,7 +10,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import GridListTile from "@material-ui/core/GridListTile";
-import Hidden from "@material-ui/core/Hidden";
 import Typography from "@material-ui/core/Typography";
 import Hotel from "@material-ui/icons/Hotel";
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -30,17 +29,18 @@ const styles = theme => ({
     backgroundColor: `${theme.palette.secondary.dark} !important`
   },
   accentButton: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.custom.accent,
     color: theme.palette.primary.dark,
     "&:hover": {
-      background: theme.palette.custom.accent
+      background: theme.palette.primary.dark,
+      color: theme.palette.custom.accent
     }
   },
   contentContainer: {
     zIndex: 999,
     padding: theme.spacing.unit,
     background:
-      "linear-gradient(45deg, rgba(103,58,183, 0),rgba(17,17,17, 0.55),rgba(17,17,17, 0.80))"
+      "linear-gradient(rgba(103,58,183, 0),rgba(17,17,17, 0.66),rgba(17,17,17, 0.77))"
   },
   contrastAccent: {
     backgroundColor: `${theme.palette.primary.dark} !important`
@@ -77,23 +77,27 @@ const styles = theme => ({
   tile: {
     display: "flex",
     flex: 1,
-    position: "relative"
+    position: "relative",
+    borderRadius: 25
   },
   tileRoot: {
     width: "100%",
-    height: "20vh",
-    padding: 3
+    height: "30vh",
+    padding: 3,
+    [theme.breakpoints.up("sm")]: {
+      height: "25vh"
+    }
   },
   venueAddress: {
     marginTop: theme.spacing.unit,
-    padding: theme.spacing.unit / 4,
+    color: theme.palette.grey[400],
     display: "flex",
-    alignItems: "center",
-    backgroundColor: "rgba(72, 40, 128, 0.66)"
+    alignItems: "center"
   },
   venueName: {
+    borderRadius: "25px 0 25px 0",
     color: theme.palette.common.white,
-    backgroundColor: "rgba(72, 40, 128, 0.66)",
+    backgroundColor: "rgba(72, 40, 128, 0.77)",
     padding: theme.spacing.unit
   },
   whiteLabel: {
@@ -138,11 +142,7 @@ class ListItemLayout extends Component {
     };
     return (
       <Fragment>
-        <GridListTile
-          classes={{ tile: classes.tile, root: classes.tileRoot }}
-          onMouseEnter={this.toggleHover}
-          onMouseLeave={this.toggleHover}
-        >
+        <GridListTile classes={{ tile: classes.tile, root: classes.tileRoot }}>
           <TileContent background={item.photourl}>
             <Grid container classes={{ container: classes.contentContainer }}>
               <Grid
@@ -170,8 +170,8 @@ class ListItemLayout extends Component {
                           )
                         }}
                       >
-                        {item.name.length > 15
-                          ? `${item.name.slice(0, 14)}...`
+                        {item.name.length > 22
+                          ? `${item.name.slice(0, 21)}...`
                           : item.name}
                       </Typography>
                     </Grid>
@@ -207,7 +207,6 @@ class ListItemLayout extends Component {
                             classes={{
                               root: classNames(
                                 classes.venueAddress,
-                                classes.contrastText,
                                 hover && classes.contrastAdress
                               )
                             }}
@@ -257,7 +256,9 @@ class ListItemLayout extends Component {
                                   }
                                 >
                                   <NetworkCheck />
-                                  {`: ${item.score.b}`}
+                                  {`: ${
+                                    item.score.b > 0 ? item.score.b : "N/R"
+                                  }`}
                                 </Typography>
                                 <Typography
                                   variant="h5"
@@ -272,7 +273,9 @@ class ListItemLayout extends Component {
                                   }
                                 >
                                   <Hotel />
-                                  {`: ${item.score.a}`}
+                                  {`: ${
+                                    item.score.a > 0 ? item.score.a : "N/R"
+                                  }`}
                                 </Typography>
                               </Fragment>
                             ) : (
@@ -365,8 +368,14 @@ const QueryContainer = ({ children, classes, item, hidden, width }) => {
 };
 
 export default withWidth()(
-  withStyles(styles)(({ classes, item, hidden, width }) => (
-    <QueryContainer classes={classes} item={item} hidden={hidden} width={width}>
+  withStyles(styles)(({ classes, item, hidden, width, refetch }) => (
+    <QueryContainer
+      classes={classes}
+      item={item}
+      hidden={hidden}
+      width={width}
+      refetch={refetch}
+    >
       <ListItemLayout />
     </QueryContainer>
   ))

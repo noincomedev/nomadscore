@@ -9,11 +9,25 @@ import Accounts from "../layouts/components/accounts/AccountsFormsLayout";
 const styles = theme => ({ rootContainer: { flex: 1 } });
 
 const AccountsPage = ({ classes, location }) => {
-  const { near, coords } = location.state;
-  const place = {
-    near,
-    coords
-  };
+  const { state } = location;
+  if (state) {
+    const { near, coords } = state;
+    const place = {
+      near,
+      coords
+    };
+    return (
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        classes={{ container: classes.rootContainer }}
+      >
+        <Accounts place={place} />
+      </Grid>
+    );
+  }
+
   return (
     <Grid
       container
@@ -21,7 +35,7 @@ const AccountsPage = ({ classes, location }) => {
       justify="center"
       classes={{ container: classes.rootContainer }}
     >
-      <Accounts place={place} />
+      <Accounts />
     </Grid>
   );
 };

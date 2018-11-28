@@ -15,7 +15,8 @@ const MOCK_DATA = Array.from({ length: 16 }, (item, index) => ({
     lng: -70.668845936179,
     address: "street name, city"
   },
-  type: index % 2 == 0 ? "hostel" : "cafe"
+  type: index % 2 == 0 ? "hostel" : "cafe",
+  votes: []
 }));
 
 Meteor.startup(() => {
