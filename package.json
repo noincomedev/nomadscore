@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "dev": "meteor --settings settings.development.json"
+    "dev": "meteor --settings settings.development.json",
+    "prodenv": "meteor run --production --settings settings.development.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",

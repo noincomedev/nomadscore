@@ -41,14 +41,13 @@ class SignupForm extends Component {
         icon: error ? "fa-remove" : "fa-check"
       });
       if (!error) {
-        client.resetStore().then(() => {
-          if (place) {
-            const { near, coords } = place;
-            history.push("/find/near", { near, coords });
-          } else {
-            history.push("/");
-          }
-        });
+        client.resetStore();
+        if (place) {
+          const { near, coords } = place;
+          history.push("/find/near", { near, coords });
+        } else {
+          history.push("/");
+        }
       }
     });
     this.toggleLoading();
