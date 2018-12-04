@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from "react";
+import classNames from "classnames";
 import { PropTypes } from "prop-types";
+import { withRouter } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
 import Grid from "@material-ui/core/Grid";
@@ -12,6 +14,7 @@ import SearchVenues from "../../../components/forms/SearchVenuesForm";
 
 const styles = theme => ({
   appBar: {
+    background: theme.palette.secondary.dark,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -31,6 +34,9 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       marginTop: 108
     }
+  },
+  darkAppBar: {
+    background: `${theme.palette.primary.dark} !important`
   }
 });
 
@@ -54,12 +60,17 @@ class NavigationLayout extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, match } = this.props;
     let { open, showSearch } = this.state;
+    const index = match.path == "/";
     return (
       <Fragment>
         <nav className={classes.navContainer}>
-          <AppBar position="fixed" color="primary" className={classes.appBar}>
+          <AppBar
+            position="fixed"
+            color={index ? "secondary" : "primary"}
+            className={classNames(!index ? classes.darkAppBar : classes.appBar)}
+          >
             {Meteor.userId() ? (
               <PrivateToolbar
                 open={open}
@@ -89,4 +100,4 @@ NavigationLayout.propTypes = {
   handleToggleDrawer: PropTypes.func
 };
 
-export default withStyles(styles)(NavigationLayout);
+export default withStyles(styles)(withRouter(NavigationLayout));

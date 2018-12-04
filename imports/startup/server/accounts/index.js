@@ -1,8 +1,6 @@
-Accounts.onCreateUser((options, user) => {
-  const profile = {
-    prospect: false,
-    restricted: false
-  };
+Accounts.onCreateUser((params, user) => {
+  const { profile } = params;
+  profile.restricted = false;
   user.profile = profile;
   return user;
 });

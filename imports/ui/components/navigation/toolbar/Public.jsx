@@ -17,8 +17,8 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     textDecoration: "none",
     color: theme.palette.common.white,
-    fontFamily: "pacifico",
-    fontSize: "2rem",
+    fontFamily: "fredoka one",
+    fontSize: "1.89rem",
     textShadow: "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
   },
   menuIcon: {

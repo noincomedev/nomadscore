@@ -7,30 +7,37 @@ import SigninForm from "../../../components/forms/accounts/SigninForm";
 import SignupForm from "../../../components/forms/accounts/SignupForm";
 
 class AccountsFormsLayout extends Component {
-  state = {
-    showSignup: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isUser: props.isUser
+    };
+  }
 
-  toggleForm = () => this.setState({ showSignup: !this.state.showSignup });
+  toggleForm = () => this.setState({ isUser: !this.state.isUser });
 
   render() {
-    const { place } = this.props;
-    const { showSignup } = this.state;
+    const { place, asProspect, categories } = this.props;
+    const { isUser } = this.state;
     return (
       <Grid container justify="center">
-        {!showSignup ? (
-          <SigninForm place={place} />
+        {isUser ? (
+          <SigninForm place={place} categories={categories} />
         ) : (
-          <SignupForm place={place} />
+          <SignupForm
+            place={place}
+            categories={categories}
+            asProspect={asProspect}
+          />
         )}
-        <Grid item xs={6} style={{ marginTop: 8 }}>
+        <Grid item xs={9} sm={3} style={{ marginTop: 8 }}>
           <Button
             variant="text"
             color="secondary"
             fullWidth
             onClick={this.toggleForm}
           >
-            {showSignup ? "Log In" : "Create Account"}
+            {isUser ? "Sign Up" : "Log In"}
           </Button>
         </Grid>
       </Grid>

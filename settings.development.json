@@ -6,10 +6,28 @@
     },
     "error": {
       "DAILY_LIMIT": "daily-limit-reached"
+    },
+    "foursquare": {
+      "request": {
+        "categoryids": {
+          "CAFES": "4bf58dd8d48988d1e0931735,4bf58dd8d48988d1f0941735",
+          "HOSTELS": "4bf58dd8d48988d1ee931735"
+        }
+      }
     }
   },
   "private": {
     "foursquare": {
+      "API_VERSION": "20180323",
+      "request": {
+        "categoryids": {
+          "CAFES": "4bf58dd8d48988d1e0931735,4bf58dd8d48988d1f0941735",
+          "HOSTELS": "4bf58dd8d48988d1ee931735"
+        },
+        "LIMIT": 10,
+        "RADIUS": 3500,
+        "INTENT": "checkin"
+      },
       "CLIENT_ID": "LJTGYWKZCKCS2GWT1IJHAE1BMKDCCE34L5PEG5XN32FEKHBH",
       "CLIENT_SECRET": "BX5FES4MPVP5BCTCJ0XFK5WSIA0125UX0GSBC0GXDYQAHAG0"
     }

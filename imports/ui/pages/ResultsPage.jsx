@@ -15,39 +15,14 @@ import MobileLayout from "../layouts/app/MobileLayout";
 const styles = theme => ({});
 
 const GET_RESULTS = gql`
-  query search($coords: CoordsInput!) {
-    search(coords: $coords) {
-      cafes {
-        _id
-        name
-        photourl
-        location {
-          address
-          lat
-          lng
-        }
-        providerid
-        score {
-          a
-          b
-        }
-        type
-      }
-      hostels {
-        _id
-        name
-        photourl
-        location {
-          address
-          lat
-          lng
-        }
-        providerid
-        score {
-          a
-          b
-        }
-        type
+  query venues($coords: CoordsInput!, $categories: CategoriesInput!) {
+    venues(coords: $coords, categories: $categories) {
+      providerid
+      providercategoryid
+      name
+      location {
+        lat
+        lng
       }
     }
   }
@@ -56,10 +31,10 @@ const GET_RESULTS = gql`
 class ResultsPage extends Component {
   render() {
     const { classes, history, location, width, loading } = this.props;
-    const { near, coords } = location.state;
+    const { near, coords, categories } = location.state;
     if (loading) return <Spinner />;
     return (
-      <Query query={GET_RESULTS} variables={{ coords }}>
+      <Query query={GET_RESULTS} variables={{ coords, categories }}>
         {({ loading, data, error, refetch }) => {
           if (loading) return <Spinner />;
           if (error)
@@ -71,8 +46,22 @@ class ResultsPage extends Component {
                 }}
               />
             );
-          const { search } = data;
-          const { hostels, cafes } = search;
+          const { venues } = data;
+
+          const cafesid = Meteor.settings.public.foursquare.request.categoryids.CAFES.split(
+            ","
+          );
+
+          const hostels = [],
+            cafes = [];
+
+          venues.forEach(venue => {
+            if (cafesid.includes(venue.providercategoryid)) cafes.push(venue);
+            else hostels.push(venue);
+          });
+
+          console.log("working on mobile then fix desktop");
+
           return (
             <Grid
               container
@@ -88,8 +77,7 @@ class ResultsPage extends Component {
                 />
               ) : (
                 <MobileLayout
-                  hostels={hostels}
-                  cafes={cafes}
+                  venues={venues}
                   place={{ near, coords }}
                   refetch={refetch}
                 />

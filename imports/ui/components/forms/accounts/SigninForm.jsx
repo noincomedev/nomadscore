@@ -25,7 +25,7 @@ class SigninForm extends Component {
   };
 
   handleSubmit = () => {
-    const { client, history, width, place } = this.props;
+    const { client, history, width, place, categories } = this.props;
     let { email, password } = this.state;
     this.toggleLoading();
 
@@ -34,7 +34,7 @@ class SigninForm extends Component {
         client.resetStore();
         if (place) {
           const { near, coords } = place;
-          history.push("/find/near", { near, coords });
+          history.push("/find/near", { near, coords, categories });
         } else {
           history.push("/");
         }
@@ -85,7 +85,12 @@ class SigninForm extends Component {
             />
           </Grid>
           <Grid item xs={5} style={{ marginTop: 8 }}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              fullWidth
+            >
               Sign In
             </Button>
           </Grid>

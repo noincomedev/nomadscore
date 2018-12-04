@@ -12,12 +12,19 @@ import VenueResolvers from "../../../api/venues/resolvers";
 import ResultSchema from "../../../api/results/Result.graphql";
 import ResultResolvers from "../../../api/results/resolvers";
 
+import FoursquareAPI from "../../../api/data-sources/foursquare";
+
 const typeDefs = [UserSchema, VenueSchema, ResultSchema];
 const resolvers = merge(UserResolvers, VenueResolvers, ResultResolvers);
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  dataSources: () => {
+    return {
+      FoursquareAPI: new FoursquareAPI()
+    };
+  },
   context: async ({ req }) => ({
     user: await getUser(req.headers.authorization)
   })

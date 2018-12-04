@@ -51,6 +51,11 @@ Venues.schema = new SimpleSchema({
     label: "Provider id",
     optional: false
   },
+  providercategoryid: {
+    type: String,
+    label: "Provider category id",
+    optional: false
+  },
   createdAt: {
     type: String,
     label: "The date this venue was created.",

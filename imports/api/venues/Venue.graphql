@@ -19,6 +19,7 @@ type Vote {
 type Venue {
   _id: ID
   providerid: ID
+  providercategoryid: ID
   name: String
   location: Coords
   photourl: String
@@ -29,5 +30,6 @@ type Venue {
 }
 
 extend type Query {
-  venue(_id: ID!): Venue
+  venue(providerid: ID!): Venue
+  venues(coords: CoordsInput!, categories: CategoriesInput!): [Venue]
 }

@@ -22,7 +22,7 @@ const styles = theme => ({
     flex: 1
   },
   tabs: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white
   }
 });
@@ -37,21 +37,14 @@ class MobileLayout extends Component {
   };
 
   render() {
-    const { classes, place, hostels, cafes, refetch } = this.props;
+    const { classes, place, venues, refetch } = this.props;
     const { tab } = this.state;
     const renderTab = () => {
-      switch (tab) {
+      switch (0) {
         case 0:
-          return <MapTab place={place} hostels={hostels} cafes={cafes} />;
+          return <MapTab place={place} venues={venues} />;
         case 1:
-          return (
-            <ListTab
-              place={place}
-              hostels={hostels}
-              cafes={cafes}
-              refetch={refetch}
-            />
-          );
+          return <ListTab venues={venues} cafes={cafes} refetch={refetch} />;
         case 2:
           return <FavoritesTab />;
       }

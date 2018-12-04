@@ -11,6 +11,11 @@ type Profile {
   lastSearch: String
 }
 
+input CategoriesInput {
+  hostels: Boolean!
+  cafes: Boolean!
+}
+
 input CoordsInput {
   lat: Float!
   lng: Float!
@@ -24,9 +29,7 @@ input VoteInput {
 
 type Query {
   user: User
-  search(coords: CoordsInput!): Result
   voted(providerid: ID!): Venue
-  restricted: User
 }
 
 type Mutation {

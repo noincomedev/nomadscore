@@ -64,7 +64,7 @@ class PrivateRoute extends Component {
     } = this.props;
     const { open } = this.state;
     const { state } = location;
-    if (!Meteor.userId()) history.push("/accounts", { ...state });
+    if (!Meteor.userId()) history.push("/accounts", { ...state, isUser: true });
     return (
       <Route
         exact={exact}

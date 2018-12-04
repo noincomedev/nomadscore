@@ -18,6 +18,9 @@ import SearchVenuesForm from "../../forms/SearchVenuesForm";
 const drawerWidth = 220;
 
 const styles = theme => ({
+  accentLogo: {
+    color: `${theme.palette.custom.accent} !important`
+  },
   drawerOpen: {
     paddingLeft: drawerWidth
   },
@@ -31,8 +34,8 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     textDecoration: "none",
     color: theme.palette.common.white,
-    fontFamily: "pacifico",
-    fontSize: "2rem",
+    fontFamily: "fredoka one",
+    fontSize: "1.89rem",
     textShadow: "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
   },
   menuIcon: {
@@ -67,7 +70,7 @@ class Private extends Component {
         >
           <Grid container justify="space-between">
             <Typography
-              className={classes.logo}
+              className={classNames(classes.logo, !index && classes.accentLogo)}
               component={Link}
               to="/"
               variant="h6"

@@ -12,7 +12,16 @@ import { withStyles } from "@material-ui/core/styles";
 import Form from "../../utils/ValidatedForm";
 import Spinner from "../../utils/Spinner";
 
-const styles = theme => ({});
+const styles = theme => ({
+  constrastButton: {
+    color: `${theme.palette.common.white}`,
+    backgroundColor: `${theme.palette.secondary.dark}`,
+    "&:hover": {
+      color: `${theme.palette.secondary.dark}`,
+      backgroundColor: `${theme.palette.secondary.light}`
+    }
+  }
+});
 
 class SignupForm extends Component {
   state = { email: "", password: "", confirmPassword: "", loading: false };
@@ -25,12 +34,23 @@ class SignupForm extends Component {
   };
 
   handleSubmit = () => {
-    const { client, history, width, place } = this.props;
+    const {
+      client,
+      history,
+      width,
+      place,
+      asProspect,
+      categories
+    } = this.props;
     let { email, password } = this.state;
     let params = {
       email,
-      password
+      password,
+      profile: {
+        prospect: asProspect
+      }
     };
+
     this.toggleLoading();
     Accounts.createUser(params, error => {
       Bert.alert({
@@ -44,7 +64,7 @@ class SignupForm extends Component {
         client.resetStore();
         if (place) {
           const { near, coords } = place;
-          history.push("/find/near", { near, coords });
+          history.push("/find/near", { near, coords, categories });
         } else {
           history.push("/");
         }
@@ -122,10 +142,17 @@ class SignupForm extends Component {
               We promise no spam at all!
             </Typography>
           </Grid>
-          <Grid item xs={5}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Sign Up
-            </Button>
+          <Grid container justify="center">
+            <Grid item xs={9} sm={3}>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                color="secondary"
+              >
+                Sign Up
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Form>
