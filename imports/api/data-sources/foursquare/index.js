@@ -1,5 +1,7 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 
+import Venues from "../../venues/Venues";
+
 class FoursquareAPI extends RESTDataSource {
   constructor() {
     super();
@@ -28,8 +30,29 @@ class FoursquareAPI extends RESTDataSource {
       client_secret: Meteor.settings.private.foursquare.CLIENT_SECRET,
       v: Meteor.settings.private.foursquare.API_VERSION
     });
+
     const { venue } = result.response;
-    return venue;
+
+    const parseAddress = ({ address, city }) => {
+      return `${address ? address + ", " : ""}${city ? city + "." : ""}`;
+    };
+
+    const cachedVenue = Venues.insert({
+      providerid: venue.id,
+      name: venue.name,
+      photourl:
+        venue.photos.count > 0
+          ? `${venue.bestPhoto.prefix}300x300${venue.bestPhoto.suffix}`
+          : "/assets/placeholder.png",
+      location: {
+        address: parseAddress(venue.location),
+        lat: venue.location.lat,
+        lng: venue.location.lng
+      },
+      votes: []
+    });
+
+    return cachedVenue;
   }
 }
 

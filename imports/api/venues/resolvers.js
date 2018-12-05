@@ -2,12 +2,12 @@ import Venues from "./Venues";
 
 export default {
   Query: {
-    venue(obj, { providerid }, { user }) {
+    venue: async (obj, { providerid }, { user, dataSources }) => {
       const cachedVenue = Venues.findOne({ providerid });
       if (cachedVenue) return cachedVenue;
-      return {
-        name: "fake name"
-      };
+      const result = await dataSources.FoursquareAPI.getVenue(providerid);
+      const { venue } = result.response;
+      return venue;
     },
     venues: async (obj, { coords, categories }, { user, dataSources }) => {
       if (Meteor.isDevelopment) {
