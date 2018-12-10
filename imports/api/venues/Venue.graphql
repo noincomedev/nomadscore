@@ -4,16 +4,9 @@ type Coords {
   lng: Float
 }
 
-type Score {
-  a: Float
-  b: Float
-}
-
 type Vote {
   owner: ID
-  venueid: ID
-  a: Int
-  b: Int
+  score: Int
 }
 
 type Venue {
@@ -23,7 +16,7 @@ type Venue {
   name: String
   location: Coords
   photourl: String
-  score: Score
+  score: Float
   voted: Boolean
   type: String
   votes: [Vote]

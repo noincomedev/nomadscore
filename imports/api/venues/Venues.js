@@ -27,14 +27,9 @@ let voteSchema = new SimpleSchema({
     label: "Owner id",
     optional: false
   },
-  a: {
+  score: {
     type: SimpleSchema.Integer,
-    label: "A",
-    optional: false
-  },
-  b: {
-    type: SimpleSchema.Integer,
-    label: "B",
+    label: "Score",
     optional: false
   }
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import classNames from "classnames";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 import Spinner from "../../utils/Spinner";
+
+import RateForm from "../../forms/RateForm";
 
 const styles = theme => ({
   rootContainer: {
@@ -42,17 +44,38 @@ const GET_VENUE = gql`
   query venue($providerid: ID!) {
     venue(providerid: $providerid) {
       _id
+      providerid
       photourl
-      score {
-        a
-        b
-      }
+      score
+      voted
     }
   }
 `;
 
-const Item = ({ classes, name, loading, data, theme }) => {
+const Item = ({ classes, name, loading, data, theme, onToggle }) => {
   const { venue } = data;
+  const renderScore = () => {
+    const { score } = venue;
+    if (score <= 2)
+      return (
+        <Typography variant="h4" align="center">
+          😐
+        </Typography>
+      );
+    if (score < 4) {
+      return (
+        <Typography variant="h4" align="center">
+          🙂
+        </Typography>
+      );
+    }
+    if (score >= 4)
+      return (
+        <Typography variant="h4" align="center">
+          😃
+        </Typography>
+      );
+  };
   return (
     <Grid
       container
@@ -113,13 +136,7 @@ const Item = ({ classes, name, loading, data, theme }) => {
               >
                 NOMADSCORE
               </Typography>
-              {loading ? (
-                <Spinner size={15} />
-              ) : (
-                <Typography variant="h4" align="center">
-                  😃
-                </Typography>
-              )}
+              {loading ? <Spinner size={15} /> : renderScore()}
             </Grid>
           </Grid>
           <Grid item xs={4}>
@@ -137,19 +154,24 @@ const Item = ({ classes, name, loading, data, theme }) => {
               >
                 CHECK-IN
               </Button>
-              <Button
-                variant="text"
-                color="secondary"
-                size="small"
-                classes={{
-                  textSecondary: classNames(
-                    classes.button,
-                    classes.accentButton
-                  )
-                }}
-              >
-                RATE
-              </Button>
+              {!venue.voted && (
+                <Button
+                  variant="text"
+                  color="secondary"
+                  size="small"
+                  classes={{
+                    textSecondary: classNames(
+                      classes.button,
+                      classes.accentButton
+                    )
+                  }}
+                  onClick={event => {
+                    onToggle();
+                  }}
+                >
+                  RATE
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -158,13 +180,44 @@ const Item = ({ classes, name, loading, data, theme }) => {
   );
 };
 
+class ToggableItem extends Component {
+  state = {
+    showForm: false
+  };
+
+  toggleForm = () => this.setState({ showForm: !this.state.showForm });
+
+  render() {
+    const { classes, data, name, theme, loading } = this.props;
+    if (loading) return <Spinner />;
+    const { showForm } = this.state;
+    if (showForm)
+      return (
+        <RateForm
+          providerid={data.venue.providerid}
+          onToggle={this.toggleForm}
+        />
+      );
+    return (
+      <Item
+        classes={classes}
+        name={name}
+        loading={loading}
+        data={data}
+        theme={theme}
+        onToggle={this.toggleForm}
+      />
+    );
+  }
+}
+
 export default withStyles(styles, { withTheme: true })(
   ({ classes, providerid, name, theme }) => (
     <Query query={GET_VENUE} variables={{ providerid }}>
       {({ error, loading, data }) => {
         if (error) return `Error: ${error}`;
         return (
-          <Item
+          <ToggableItem
             classes={classes}
             name={name}
             loading={loading}

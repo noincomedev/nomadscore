@@ -22,9 +22,8 @@ input CoordsInput {
 }
 
 input VoteInput {
-  venueid: ID
-  a: Int
-  b: Int
+  providerid: ID
+  score: Int
 }
 
 type Query {

@@ -21,18 +21,19 @@ export default {
     },
     submitVote(obj, { vote }, { user }) {
       if (user) {
-        return Venues.update(
-          { providerid: vote.venueid },
+        Venues.update(
+          { providerid: vote.providerid },
           {
             $addToSet: {
               votes: {
                 owner: user._id,
-                a: vote.a,
-                b: vote.b
+                score: vote.score
               }
             }
           }
         );
+        const venue = Venues.findOne({ providerid: vote.providerid });
+        return { ...venue, voted: true };
       }
       throw new Error("unauthorized");
     }

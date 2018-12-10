@@ -71,23 +71,17 @@ export default {
       const venue = Venues.findOne({ providerid });
       const { votes } = venue;
       if (votes) {
-        const pointsa = [],
-          pointsb = [];
-        venue.votes.forEach(vote => {
-          pointsa.push(vote.a);
-          pointsb.push(vote.b);
-        });
-
-        const totala = pointsa.reduce((a, b) => a + b, 0);
-        const totalb = pointsb.reduce((a, b) => a + b, 0);
-
-        return {
-          a: totala / votes.length,
-          b: totalb / votes.length
-        };
+        const scores = [];
+        venue.votes.forEach(vote => scores.push(vote.score));
+        return scores.reduce((a, b) => a + b, 0) / venue.votes.length;
       } else {
-        return { a: 0, b: 0 };
+        return 0;
       }
+    },
+    voted: ({ providerid }, args, { user }) => {
+      const venue = Venues.findOne({ providerid });
+      const userids = venue.votes.map(vote => vote.owner);
+      return userids.includes(user._id);
     }
   }
 };
