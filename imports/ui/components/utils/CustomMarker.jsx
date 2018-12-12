@@ -10,5 +10,5 @@ export default ({ active, providercategoryid }) => {
   const src = `/assets/${isCafe ? "cafe" : "hostel"}-marker${
     active ? "-active" : ""
   }.png`;
-  return <img src={src} style={{ maxHeight: "6vh" }} />;
+  return <img src={src} style={{ maxHeight: "8vh" }} />;
 };

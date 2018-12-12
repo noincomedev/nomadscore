@@ -84,23 +84,28 @@ const Item = withRouter(
     const { venue } = data;
     const renderScore = () => {
       const { score } = venue;
-      if (score <= 2)
+      if (score == null)
         return (
-          <Typography variant="h4" align="center">
+          <Typography variant="h3" align="center">
+            🚧
+          </Typography>
+        );
+      if (score < 3)
+        return (
+          <Typography variant="h3" align="center">
             😐
           </Typography>
         );
-      if (score < 4) {
+      if (score <= 4)
         return (
-          <Typography variant="h4" align="center">
+          <Typography variant="h3" align="center">
             🙂
           </Typography>
         );
-      }
-      if (score >= 4)
+      if (score > 4)
         return (
-          <Typography variant="h4" align="center">
-            😃
+          <Typography variant="h3" align="center">
+            😀
           </Typography>
         );
     };
@@ -156,7 +161,7 @@ const Item = withRouter(
                       style={{ color: theme.palette.grey[500] }}
                       align="center"
                     >
-                      NOMADSCORE
+                      Score
                     </Typography>
                     {loading ? <Spinner size={15} /> : renderScore()}
                   </Grid>
