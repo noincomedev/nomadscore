@@ -1,4 +1,0 @@
-type Result {
-  cafes: [Venue]
-  hostels: [Venue]
-}

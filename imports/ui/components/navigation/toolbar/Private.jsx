@@ -18,6 +18,9 @@ import SearchVenuesForm from "../../forms/SearchVenuesForm";
 const drawerWidth = 220;
 
 const styles = theme => ({
+  arrowIcon: {
+    color: theme.palette.custom.accent
+  },
   accentLogo: {
     color: `${theme.palette.custom.accent} !important`
   },

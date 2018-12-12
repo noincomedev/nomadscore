@@ -9,13 +9,10 @@ import UserResolvers from "../../../api/users/resolvers";
 import VenueSchema from "../../../api/venues/Venue.graphql";
 import VenueResolvers from "../../../api/venues/resolvers";
 
-import ResultSchema from "../../../api/results/Result.graphql";
-import ResultResolvers from "../../../api/results/resolvers";
-
 import FoursquareAPI from "../../../api/data-sources/foursquare";
 
-const typeDefs = [UserSchema, VenueSchema, ResultSchema];
-const resolvers = merge(UserResolvers, VenueResolvers, ResultResolvers);
+const typeDefs = [UserSchema, VenueSchema];
+const resolvers = merge(UserResolvers, VenueResolvers);
 
 const server = new ApolloServer({
   typeDefs,

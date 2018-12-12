@@ -77,13 +77,14 @@ class SearchVenueForm extends Component {
   handleSelect = near => this.setState({ near, selected: true });
 
   onSearch = () => {
-    const { history, width } = this.props;
+    const { history, width, onSelect } = this.props;
     const { near, hostels, cafes, selected } = this.state;
     if (selected) {
       geocodeByAddress(near)
         .then(results => getLatLng(results[0]))
         .then(latLng => {
           const { lat, lng } = latLng;
+          if (onSelect) onSelect();
           history.push("/find/near", {
             near,
             coords: { lat, lng },

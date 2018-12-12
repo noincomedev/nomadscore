@@ -6,11 +6,9 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Map from "@material-ui/icons/Map";
 import Star from "@material-ui/icons/Star";
-import ViewList from "@material-ui/icons/ViewList";
 import { withStyles } from "@material-ui/core/styles";
 
 import FavoritesTab from "../tabs/FavoritesTabLayout";
-import ListTab from "../tabs/ListTabLayout";
 import MapTab from "../tabs/MapTabLayout";
 
 const styles = theme => ({
@@ -40,12 +38,10 @@ class MobileLayout extends Component {
     const { classes, place, venues, refetch } = this.props;
     const { tab } = this.state;
     const renderTab = () => {
-      switch (0) {
+      switch (tab) {
         case 0:
           return <MapTab place={place} venues={venues} />;
         case 1:
-          return <ListTab venues={venues} cafes={cafes} refetch={refetch} />;
-        case 2:
           return <FavoritesTab />;
       }
     };
@@ -64,7 +60,6 @@ class MobileLayout extends Component {
           classes={{ root: classes.tabs, indicator: classes.indicator }}
         >
           <Tab label={<Map />} />
-          <Tab label={<ViewList />} />
           <Tab label={<Star />} />
         </Tabs>
         <Grid
