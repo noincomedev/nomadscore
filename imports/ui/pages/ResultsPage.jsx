@@ -59,9 +59,6 @@ class ResultsPage extends Component {
             if (cafesid.includes(venue.providercategoryid)) cafes.push(venue);
             else hostels.push(venue);
           });
-
-          console.log("working on mobile then fix desktop");
-
           return (
             <Grid
               container
@@ -70,10 +67,9 @@ class ResultsPage extends Component {
             >
               {isWidthUp("sm", width) ? (
                 <DesktopLayout
-                  hostels={hostels}
-                  cafes={cafes}
-                  place={{ near, coords }}
+                  venues={venues}
                   refetch={refetch}
+                  place={{ near, coords }}
                 />
               ) : (
                 <MobileLayout

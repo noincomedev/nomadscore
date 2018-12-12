@@ -12,23 +12,23 @@ import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { withStyles } from "@material-ui/core/styles";
 
 import Spinner from "../utils/Spinner";
+import { Typography } from "@material-ui/core";
 
 const styles = theme => ({
+  button: {
+    color: "black",
+    padding: theme.spacing.unit / 2
+  },
   disabledButton: {
     backgroundColor: `${theme.palette.secondary.dark} !important`,
     color: `${theme.palette.custom.accent} !important`
   },
-  greenButton: {
-    color: "green"
-  },
-  redButton: {
-    color: "red"
-  },
   selected: {
     fontSize: "2.5rem"
   },
-  yellowButton: {
-    color: "yellow"
+  paper: {
+    backgroundColor: theme.palette.primary.dark,
+    marginBottom: theme.spacing.unit / 2
   }
 });
 
@@ -39,6 +39,7 @@ const SUBMIT_VOTE = gql`
       providerid
       score
       voted
+      votesCount
     }
   }
 `;
@@ -56,30 +57,42 @@ class RateForm extends Component {
   };
 
   render() {
-    const { classes, providerid, onToggle, width } = this.props;
+    const { classes, providerid, onToggle, width, theme } = this.props;
     const { score } = this.state;
     return (
-      <Grid container>
+      <Grid container alignContent="space-around" style={{ padding: 8 }}>
         <Grid
           item
           xs={12}
           component={Paper}
-          elevation={2}
-          style={{ margin: 2 }}
+          elevation={5}
+          classes={{ item: classes.paper }}
         >
           <Grid
             container
             style={{ padding: 8, heihgt: "100%" }}
             justify="space-between"
           >
+            <Grid item xs={12}>
+              <Typography
+                variant="subtitle1"
+                style={{ color: theme.palette.custom.accent }}
+              >
+                Rate network
+              </Typography>
+            </Grid>
             <Grid item xs={2}>
               <Grid
                 container
                 style={{ height: "100%" }}
                 justify="center"
                 alignItems="center"
+                direction="column"
               >
-                <i className="fas fa-wifi fa-2x" />
+                <i
+                  className="fas fa-wifi fa-2x"
+                  style={{ color: theme.palette.grey[500] }}
+                />
               </Grid>
             </Grid>
             <Grid item xs={10}>
@@ -95,7 +108,6 @@ class RateForm extends Component {
                   classes={{
                     root: classNames(
                       classes.button,
-                      score == 1 && classes.redButton,
                       score == 1 && classes.selected
                     )
                   }}
@@ -112,7 +124,6 @@ class RateForm extends Component {
                   classes={{
                     root: classNames(
                       classes.button,
-                      score == 3 && classes.yellowButton,
                       score == 3 && classes.selected
                     )
                   }}
@@ -128,7 +139,6 @@ class RateForm extends Component {
                   classes={{
                     root: classNames(
                       classes.button,
-                      score == 5 && classes.greenButton,
                       score == 5 && classes.selected
                     )
                   }}
@@ -213,4 +223,4 @@ class RateForm extends Component {
   }
 }
 
-export default withWidth()(withStyles(styles)(RateForm));
+export default withWidth()(withStyles(styles, { withTheme: true })(RateForm));

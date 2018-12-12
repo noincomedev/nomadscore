@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from "react";
-import classNames from "classnames";
+import React, { Component } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 
 import Grid from "@material-ui/core/Grid";
@@ -11,22 +10,21 @@ import Venue from "../../components/lists/venues/Item";
 
 import CustomMarker from "../../components/utils/CustomMarker";
 
-const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1Ijoib3dpdHNlcnZpY2VzIiwiYSI6ImNqbGg2M3phdzFlejUzcXV2MW85cnF6cGIifQ.tTlo5ekxL4hcRT2YGCROpQ",
-  interactive: true
-});
-
 const styles = theme => ({
   rootContainer: {
     flex: 1,
-    backgroundColor: theme.palette.primary.dark
+    backgroundColor: theme.palette.primary.main,
+    height: "100%"
   },
   icon: {
     "&:hover": {
       zIndex: 1000
     }
   }
+});
+
+const Map = ReactMapboxGl({
+  accessToken: Meteor.settings.public.mapbox.API_KEY
 });
 
 class MapTabLayout extends Component {
@@ -48,7 +46,7 @@ class MapTabLayout extends Component {
       >
         <div
           style={{
-            height: isWidthUp("sm", width) ? "80vh" : "58vh",
+            height: isWidthUp("sm", width) ? "55vh" : "55vh",
             paddingBottom: 8
           }}
         >

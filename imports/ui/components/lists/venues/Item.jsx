@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
+import { withRouter } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -16,7 +17,7 @@ import RateForm from "../../forms/RateForm";
 const styles = theme => ({
   rootContainer: {
     maxHeight: "100%",
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.dark,
     borderRadius: theme.spacing.unit * 2,
     padding: theme.spacing.unit,
     borderBottom: `1px solid ${theme.palette.grey[900]}`,
@@ -36,7 +37,10 @@ const styles = theme => ({
     fontWeight: 800
   },
   photo: {
-    borderRadius: "16px 0px 0px 16px"
+    borderRadius: "16px 0px 0px 16px",
+    maxWidth: "100%",
+    height: "100%",
+    position: "absolute"
   }
 });
 
@@ -52,133 +56,167 @@ const GET_VENUE = gql`
   }
 `;
 
-const Item = ({ classes, name, loading, data, theme, onToggle }) => {
-  const { venue } = data;
-  const renderScore = () => {
-    const { score } = venue;
-    if (score <= 2)
-      return (
-        <Typography variant="h4" align="center">
-          😐
-        </Typography>
-      );
-    if (score < 4) {
-      return (
-        <Typography variant="h4" align="center">
-          🙂
-        </Typography>
-      );
+const CURRENT_USER = gql`
+  query currentUser {
+    user {
+      _id
+      profile {
+        at
+      }
     }
-    if (score >= 4)
-      return (
-        <Typography variant="h4" align="center">
-          😃
-        </Typography>
-      );
-  };
-  return (
-    <Grid
-      container
-      component={Paper}
-      elevation={5}
-      classes={{ container: classes.rootContainer }}
-    >
-      <Grid item xs={4}>
-        {!loading && (
+  }
+`;
+
+const CHECK_AT = gql`
+  mutation checkAt($providerid: ID!) {
+    checkAt(providerid: $providerid) {
+      _id
+      profile {
+        at
+      }
+    }
+  }
+`;
+
+const Item = withRouter(
+  ({ classes, name, history, loading, data, theme, onToggle }) => {
+    const { venue } = data;
+    const renderScore = () => {
+      const { score } = venue;
+      if (score <= 2)
+        return (
+          <Typography variant="h4" align="center">
+            😐
+          </Typography>
+        );
+      if (score < 4) {
+        return (
+          <Typography variant="h4" align="center">
+            🙂
+          </Typography>
+        );
+      }
+      if (score >= 4)
+        return (
+          <Typography variant="h4" align="center">
+            😃
+          </Typography>
+        );
+    };
+    return (
+      <Grid container justify="center" alignItems="center">
+        <Grid item xs={12} sm={8}>
           <Grid
             container
-            alignItems="center"
-            style={{ height: "100%", position: "relative" }}
+            component={Paper}
+            elevation={5}
+            classes={{ container: classes.rootContainer }}
           >
-            {loading ? (
-              <Spinner />
-            ) : (
-              <img
-                src={venue.photourl}
-                style={{
-                  maxWidth: "100%",
-                  position: "absolute",
-                  height: "100%"
-                }}
-                className={classes.photo}
-              />
-            )}
-          </Grid>
-        )}
-      </Grid>
-      <Grid
-        item
-        xs={8}
-        style={{ display: "flex", flexDirection: "column", flex: 1 }}
-      >
-        <Grid container justify="center">
-          <Typography
-            variant="h6"
-            classes={{ root: classes.headline }}
-            align="center"
-            paragraph
-          >
-            {name}
-          </Typography>
-        </Grid>
-        <Grid container justify="center" style={{ height: "100%" }}>
-          <Grid item xs={8}>
-            <Grid
-              container
-              style={{ height: "100%" }}
-              direction="column"
-              justify="space-evenly"
-            >
-              <Typography
-                variant="caption"
-                style={{ color: theme.palette.grey[500] }}
-                align="center"
-              >
-                NOMADSCORE
-              </Typography>
-              {loading ? <Spinner size={15} /> : renderScore()}
-            </Grid>
-          </Grid>
-          <Grid item xs={4}>
-            <Grid
-              container
-              style={{ height: "100%" }}
-              direction="column"
-              justify="space-around"
-            >
-              <Button
-                variant="text"
-                color="secondary"
-                size="small"
-                classes={{ textSecondary: classes.button }}
-              >
-                CHECK-IN
-              </Button>
-              {!venue.voted && (
-                <Button
-                  variant="text"
-                  color="secondary"
-                  size="small"
-                  classes={{
-                    textSecondary: classNames(
-                      classes.button,
-                      classes.accentButton
-                    )
-                  }}
-                  onClick={event => {
-                    onToggle();
-                  }}
+            <Grid item xs={4}>
+              {!loading && (
+                <Grid
+                  container
+                  alignItems="center"
+                  style={{ height: "100%", position: "relative" }}
                 >
-                  RATE
-                </Button>
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <img src={venue.photourl} className={classes.photo} />
+                  )}
+                </Grid>
               )}
             </Grid>
+            <Grid
+              item
+              xs={8}
+              style={{ display: "flex", flexDirection: "column", flex: 1 }}
+            >
+              <Grid container justify="center">
+                <Typography
+                  variant="h6"
+                  classes={{ root: classes.headline }}
+                  align="center"
+                  paragraph
+                >
+                  {name}
+                </Typography>
+              </Grid>
+              <Grid container justify="center" style={{ height: "100%" }}>
+                <Grid item xs={8}>
+                  <Grid
+                    container
+                    style={{ height: "100%" }}
+                    direction="column"
+                    justify="space-evenly"
+                  >
+                    <Typography
+                      variant="caption"
+                      style={{ color: theme.palette.grey[500] }}
+                      align="center"
+                    >
+                      NOMADSCORE
+                    </Typography>
+                    {loading ? <Spinner size={15} /> : renderScore()}
+                  </Grid>
+                </Grid>
+                <Grid item xs={4}>
+                  <Grid
+                    container
+                    style={{ height: "100%" }}
+                    direction="column"
+                    justify="space-around"
+                  >
+                    <Mutation
+                      awaitRefetchQueries
+                      mutation={CHECK_AT}
+                      variables={{ providerid: venue.providerid }}
+                    >
+                      {(checkAt, { data, error, loading }) => {
+                        if (loading) return <Spinner size={15} />;
+                        return (
+                          <Button
+                            variant="text"
+                            color="secondary"
+                            size="small"
+                            classes={{ textSecondary: classes.button }}
+                            onClick={event => {
+                              checkAt().then(history.push("/at"));
+                            }}
+                          >
+                            CHECK-IN
+                          </Button>
+                        );
+                      }}
+                    </Mutation>
+                    {!venue.voted && (
+                      <Button
+                        variant="text"
+                        color="secondary"
+                        size="small"
+                        classes={{
+                          textSecondary: classNames(
+                            classes.button,
+                            classes.accentButton
+                          )
+                        }}
+                        onClick={event => {
+                          onToggle();
+                        }}
+                      >
+                        RATE
+                      </Button>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  }
+);
 
 class ToggableItem extends Component {
   state = {

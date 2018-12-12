@@ -21,9 +21,6 @@ import Spinner from "../../../components/utils/Spinner";
 
 import TileContent from "../lists/TileContentLayout";
 
-import RateHostel from "../../../components/forms/ratings/HostelRatingForm";
-import RateCafe from "../../../components/forms/ratings/CafeRatingForm";
-
 const styles = theme => ({
   accent: {
     backgroundColor: `${theme.palette.secondary.dark} !important`

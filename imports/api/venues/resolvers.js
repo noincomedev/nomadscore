@@ -82,6 +82,9 @@ export default {
       const venue = Venues.findOne({ providerid });
       const userids = venue.votes.map(vote => vote.owner);
       return userids.includes(user._id);
+    },
+    votesCount: ({ votes }) => {
+      return votes.length;
     }
   }
 };

@@ -78,11 +78,13 @@ class PriceItemItemLayout extends Component {
   };
 
   onPurchase = () => {
-    const { width } = this.props;
+    const { history, width } = this.props;
     this.toggleLoading();
     this.props
       .setAsProspect()
       .then(result => {
+        console.log(result);
+
         Bert.alert({
           title: "SUCCESS",
           message: "We will contact you soon.",
@@ -90,6 +92,7 @@ class PriceItemItemLayout extends Component {
           style: isWidthUp("md", width) ? "growl-top-right" : "fixed-top",
           icon: "fa-check"
         });
+        history.push("/");
       })
       .catch(error =>
         Bert.alert({
@@ -204,14 +207,12 @@ class PriceItemItemLayout extends Component {
 const SET_AS_PROSPECT = gql`
   mutation setAsProspect {
     setAsProspect {
+      _id
       prospect
     }
   }
 `;
 
 export default graphql(SET_AS_PROSPECT, {
-  name: "setAsProspect",
-  options: {
-    refetchQueries: ["user"]
-  }
+  name: "setAsProspect"
 })(withWidth()(withStyles(styles)(withRouter(PriceItemItemLayout))));

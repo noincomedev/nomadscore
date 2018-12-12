@@ -14,6 +14,7 @@ import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 
 import AccountsPage from "../../pages/AccountsPage";
+import CheckedAtPage from "../../pages/CheckedAtPage";
 import LandingPage from "../../pages/LandingPage";
 import ResultsPage from "../../pages/ResultsPage";
 import ScalePage from "../../pages/ScalePage";
@@ -33,6 +34,16 @@ const Router = ({ loading, user }) => {
               name="landing-page"
               content="index"
               title="Home"
+            />
+            <PrivateRoute
+              exact
+              path="/at"
+              content="at"
+              name="at"
+              title="AT"
+              component={CheckedAtPage}
+              user={user}
+              loading={loading}
             />
             <PrivateRoute
               exact
@@ -79,6 +90,9 @@ const CURRENT_USER = gql`
     user {
       _id
       prospect
+      profile {
+        at
+      }
     }
   }
 `;

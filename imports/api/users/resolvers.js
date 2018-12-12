@@ -36,6 +36,24 @@ export default {
         return { ...venue, voted: true };
       }
       throw new Error("unauthorized");
+    },
+    checkAt(obj, { providerid }, { user }) {
+      if (user) {
+        const { profile } = user;
+        profile.at = providerid;
+        Meteor.users.update({ _id: user._id }, { $set: { profile } });
+        return Meteor.users.findOne({ _id: user._id });
+      }
+      throw new Error("unauthorized");
+    },
+    checkOut(obj, args, { user }) {
+      if (user) {
+        const { profile } = user;
+        profile.at = "";
+        Meteor.users.update({ _id: user._id }, { $set: { profile } });
+        return Meteor.users.findOne({ _id: user._id });
+      }
+      throw new Error("unauthorized");
     }
   },
   User: {
@@ -47,6 +65,9 @@ export default {
     prospect: ({ profile }) => {
       const { prospect } = profile;
       return prospect ? prospect : false;
+    },
+    venue: user => {
+      return Venues.findOne({ providerid: user.profile.at });
     }
   }
 };

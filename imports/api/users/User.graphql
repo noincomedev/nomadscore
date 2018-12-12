@@ -3,12 +3,14 @@ type User {
   admin: Boolean
   profile: Profile
   prospect: Boolean
+  venue: Venue
 }
 
 type Profile {
   name: String
   imgurl: String
   lastSearch: String
+  at: ID
 }
 
 input CategoriesInput {
@@ -34,4 +36,6 @@ type Query {
 type Mutation {
   submitVote(vote: VoteInput!): Venue
   setAsProspect: User
+  checkAt(providerid: ID!): User
+  checkOut: User
 }

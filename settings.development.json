@@ -4,6 +4,9 @@
     "google": {
       "API_KEY": "AIzaSyDNJXdn0gsxwN4cNF5NaMurO0roYImQ5dU"
     },
+    "mapbox": {
+      "API_KEY": "pk.eyJ1Ijoibm9pbmNvbWVkZXYiLCJhIjoiY2pwanZxNTNvMGI2bTNxczlubTNpaHFycCJ9.pufBIhv7SUUHLSMXIyv3kQ"
+    },
     "error": {
       "DAILY_LIMIT": "daily-limit-reached"
     },

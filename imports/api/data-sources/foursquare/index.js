@@ -24,7 +24,7 @@ class FoursquareAPI extends RESTDataSource {
     return this.get("search", params);
   }
 
-  async getVenueDetails(id) {
+  async getVenue(id) {
     const result = await this.get(`${id}`, {
       client_id: Meteor.settings.private.foursquare.CLIENT_ID,
       client_secret: Meteor.settings.private.foursquare.CLIENT_SECRET,
