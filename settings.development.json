@@ -27,7 +27,7 @@
           "CAFES": "4bf58dd8d48988d1e0931735,4bf58dd8d48988d1f0941735",
           "HOSTELS": "4bf58dd8d48988d1ee931735"
         },
-        "LIMIT": 10,
+        "LIMIT": 25,
         "RADIUS": 3500,
         "INTENT": "checkin"
       },

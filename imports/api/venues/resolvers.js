@@ -6,13 +6,13 @@ export default {
       const cachedVenue = Venues.findOne({ providerid });
       if (cachedVenue) return cachedVenue;
       const result = await dataSources.FoursquareAPI.getVenue(providerid);
-      const { venue } = result.response;
-      return venue;
+      return result;
     },
     venues: async (obj, { coords, categories }, { user, dataSources }) => {
-      if (Meteor.isDevelopment) {
-        return Venues.find({}, { limit: 10 }).fetch();
-      }
+      // if (Meteor.isDevelopment) {
+      //   return Venues.find({}, { limit: 10 }).fetch();
+      // }
+
       const { profile } = user;
       const { lastSearch } = profile;
       let restricted = false;
@@ -54,15 +54,31 @@ export default {
 
         const { venues } = result.response;
 
-        return venues.map(venue => ({
-          providerid: venue.id,
-          providercategoryid: venue.categories[0].id,
-          name: venue.name,
-          location: {
-            lat: venue.location.lat,
-            lng: venue.location.lng
-          }
-        }));
+        return venues.map(venue => {
+          const venuecategoryids = venue.categories.map(
+            category => category.id
+          );
+
+          const isHostel = venuecategoryids.includes(
+            Meteor.settings.private.foursquare.request.categoryids.HOSTELS
+          );
+
+          const hostelcategoryid =
+            Meteor.settings.private.foursquare.request.categoryids.HOSTELS;
+          const cafecategoryid = Meteor.settings.private.foursquare.request.categoryids.CAFES.split(
+            ","
+          )[0];
+
+          return {
+            providerid: venue.id,
+            providercategoryid: isHostel ? hostelcategoryid : cafecategoryid,
+            name: venue.name,
+            location: {
+              lat: venue.location.lat,
+              lng: venue.location.lng
+            }
+          };
+        });
       }
     }
   },

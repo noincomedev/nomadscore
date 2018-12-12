@@ -37,8 +37,21 @@ class FoursquareAPI extends RESTDataSource {
       return `${address ? address + ", " : ""}${city ? city + "." : ""}`;
     };
 
+    const venuecategoryids = venue.categories.map(category => category.id);
+
+    const isHostel = venuecategoryids.includes(
+      Meteor.settings.private.foursquare.request.categoryids.HOSTELS
+    );
+
+    const hostelcategoryid =
+      Meteor.settings.private.foursquare.request.categoryids.HOSTELS;
+    const cafecategoryid = Meteor.settings.private.foursquare.request.categoryids.CAFES.split(
+      ","
+    )[0];
+
     const cachedVenue = Venues.insert({
       providerid: venue.id,
+      providercategoryid: isHostel ? hostelcategoryid : cafecategoryid,
       name: venue.name,
       photourl:
         venue.photos.count > 0
@@ -49,10 +62,11 @@ class FoursquareAPI extends RESTDataSource {
         lat: venue.location.lat,
         lng: venue.location.lng
       },
+      type: isHostel ? "hostel" : "cafe",
       votes: []
     });
 
-    return cachedVenue;
+    return Venues.findOne({ _id: cachedVenue });
   }
 }
 

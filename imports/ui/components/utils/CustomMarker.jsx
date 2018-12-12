@@ -4,7 +4,9 @@ export default ({ active, providercategoryid }) => {
   const cafesids = Meteor.settings.public.foursquare.request.categoryids.CAFES.split(
     ","
   );
+
   const isCafe = cafesids.includes(providercategoryid);
+
   const src = `/assets/${isCafe ? "cafe" : "hostel"}-marker${
     active ? "-active" : ""
   }.png`;

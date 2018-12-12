@@ -80,6 +80,7 @@ const CHECK_AT = gql`
 
 const Item = withRouter(
   ({ classes, name, history, loading, data, theme, onToggle }) => {
+    if (loading) return <Spinner />;
     const { venue } = data;
     const renderScore = () => {
       const { score } = venue;
@@ -253,7 +254,7 @@ export default withStyles(styles, { withTheme: true })(
   ({ classes, providerid, name, theme }) => (
     <Query query={GET_VENUE} variables={{ providerid }}>
       {({ error, loading, data }) => {
-        if (error) return `Error: ${error}`;
+        if (error) return `Error aa: ${error}`;
         return (
           <ToggableItem
             classes={classes}
