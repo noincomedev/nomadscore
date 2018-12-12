@@ -83,8 +83,6 @@ class PriceItemItemLayout extends Component {
     this.props
       .setAsProspect()
       .then(result => {
-        console.log(result);
-
         Bert.alert({
           title: "SUCCESS",
           message: "We will contact you soon.",
